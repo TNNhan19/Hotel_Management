@@ -29,10 +29,11 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddRoom));
             this.label1 = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.hotelManagementDataSetBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.hotelManagementDataSet = new QuanLyHotel_WindowProgramming.HotelManagementDataSet();
+            this.hotelManagementDataSetBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.labelRoomNumber = new System.Windows.Forms.Label();
             this.labelTypeRoom = new System.Windows.Forms.Label();
             this.labelBed = new System.Windows.Forms.Label();
@@ -43,8 +44,8 @@
             this.txtBed = new System.Windows.Forms.ComboBox();
             this.buttonAdd = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.hotelManagementDataSetBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.hotelManagementDataSet)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.hotelManagementDataSetBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -60,25 +61,26 @@
             // dataGridView1
             // 
             this.dataGridView1.AutoGenerateColumns = false;
+            this.dataGridView1.BackgroundColor = System.Drawing.Color.MistyRose;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.DataSource = this.hotelManagementDataSet;
             this.dataGridView1.Location = new System.Drawing.Point(21, 85);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(601, 332);
+            this.dataGridView1.Size = new System.Drawing.Size(528, 332);
             this.dataGridView1.TabIndex = 1;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
-            // 
-            // hotelManagementDataSetBindingSource
-            // 
-            this.hotelManagementDataSetBindingSource.DataSource = this.hotelManagementDataSet;
-            this.hotelManagementDataSetBindingSource.Position = 0;
             // 
             // hotelManagementDataSet
             // 
             this.hotelManagementDataSet.DataSetName = "HotelManagementDataSet";
             this.hotelManagementDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
+            // hotelManagementDataSetBindingSource
+            // 
+            this.hotelManagementDataSetBindingSource.DataSource = this.hotelManagementDataSet;
+            this.hotelManagementDataSetBindingSource.Position = 0;
             // 
             // labelRoomNumber
             // 
@@ -161,6 +163,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.ClientSize = new System.Drawing.Size(975, 463);
             this.Controls.Add(this.buttonAdd);
             this.Controls.Add(this.txtBed);
@@ -177,8 +180,8 @@
             this.Text = "AddRoom";
             this.Load += new System.EventHandler(this.AddRoom_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.hotelManagementDataSetBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.hotelManagementDataSet)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.hotelManagementDataSetBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

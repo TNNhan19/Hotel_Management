@@ -33,5 +33,29 @@ namespace QuanLyHotel_WindowProgramming
         {
 
         }
+
+        private void buttonDkyCustomer_Click(object sender, EventArgs e)
+        {
+            CustomerRegistration customerForm = new CustomerRegistration(); // Tạo đối tượng form
+            customerForm.ShowDialog();
+        }
+
+        private void btnManagementRoom_Click(object sender, EventArgs e)
+        {
+            RoomManagement roomForm = new RoomManagement(); // Tạo đối tượng form
+            roomForm.ShowDialog();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            CustomerManagementForm customerManagementForm = new CustomerManagementForm(); // Tạo đối tượng form
+            customerManagementForm.ShowDialog();
+        }
+
+        private void btnFoodManagement_Click(object sender, EventArgs e)
+        {
+            FoodManagement foodManagement = new FoodManagement(); // Tạo đối tượng form
+                foodManagement.ShowDialog();
+        }
     }
 }

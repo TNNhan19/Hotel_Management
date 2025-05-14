@@ -90,6 +90,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Database.cs" />
     <Compile Include="HotelManagementDataSet4.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -151,11 +152,24 @@
     <Compile Include="TIEPTAN\AddRoom.Designer.cs">
       <DependentUpon>AddRoom.cs</DependentUpon>
     </Compile>
+    <Compile Include="TIEPTAN\Customer.cs" />
+    <Compile Include="TIEPTAN\CustomerManagementForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TIEPTAN\CustomerManagementForm.Designer.cs">
+      <DependentUpon>CustomerManagementForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="TIEPTAN\CustomerRegistration.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="TIEPTAN\CustomerRegistration.Designer.cs">
       <DependentUpon>CustomerRegistration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TIEPTAN\FoodManagement.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TIEPTAN\FoodManagement.Designer.cs">
+      <DependentUpon>FoodManagement.cs</DependentUpon>
     </Compile>
     <Compile Include="TIEPTAN\MainForm_TiepTan.cs">
       <SubType>Form</SubType>
@@ -190,6 +204,12 @@
     <Compile Include="LOGIN\Register.Designer.cs">
       <DependentUpon>Register.cs</DependentUpon>
     </Compile>
+    <Compile Include="TIEPTAN\Report.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TIEPTAN\Report.Designer.cs">
+      <DependentUpon>Report.cs</DependentUpon>
+    </Compile>
     <Compile Include="TIEPTAN\Room.cs" />
     <Compile Include="QUANLY\TinhTienCuoiNgay.cs">
       <SubType>Form</SubType>
@@ -198,6 +218,12 @@
       <DependentUpon>TinhTienCuoiNgay.cs</DependentUpon>
     </Compile>
     <Compile Include="TIEPTAN\RoomDAO.cs" />
+    <Compile Include="TIEPTAN\RoomManagement.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TIEPTAN\RoomManagement.Designer.cs">
+      <DependentUpon>RoomManagement.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="LOGIN\ForgetPassword.resx">
       <DependentUpon>ForgetPassword.cs</DependentUpon>
     </EmbeddedResource>
@@ -228,11 +254,23 @@
     <EmbeddedResource Include="TIEPTAN\AddRoom.resx">
       <DependentUpon>AddRoom.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="TIEPTAN\CustomerManagementForm.resx">
+      <DependentUpon>CustomerManagementForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TIEPTAN\CustomerRegistration.resx">
       <DependentUpon>CustomerRegistration.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="TIEPTAN\FoodManagement.resx">
+      <DependentUpon>FoodManagement.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TIEPTAN\MainForm_TiepTan.resx">
       <DependentUpon>MainForm_TiepTan.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TIEPTAN\Report.resx">
+      <DependentUpon>Report.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TIEPTAN\RoomManagement.resx">
+      <DependentUpon>RoomManagement.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="HotelManagementDataSet.xsc">
       <DependentUpon>HotelManagementDataSet.xsd</DependentUpon>
