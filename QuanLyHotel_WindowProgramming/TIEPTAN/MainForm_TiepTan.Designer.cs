@@ -85,6 +85,7 @@
             this.buttonDetailsCustomer.TabIndex = 3;
             this.buttonDetailsCustomer.Text = "Chi tiết Khách hàng";
             this.buttonDetailsCustomer.UseVisualStyleBackColor = false;
+            this.buttonDetailsCustomer.Click += new System.EventHandler(this.buttonDetailsCustomer_Click);
             // 
             // btnFoodManagement
             // 

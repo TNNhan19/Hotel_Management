@@ -44,15 +44,18 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
 
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomerManagementForm));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.txtBed = new System.Windows.Forms.TextBox();
+            this.txtRoomType = new System.Windows.Forms.TextBox();
+            this.buttonAdd = new System.Windows.Forms.Button();
             this.radioother = new System.Windows.Forms.RadioButton();
             this.radioFemale = new System.Windows.Forms.RadioButton();
             this.radioMale = new System.Windows.Forms.RadioButton();
             this.label10 = new System.Windows.Forms.Label();
             this.buttonRefresh = new System.Windows.Forms.Button();
             this.buttonDelete = new System.Windows.Forms.Button();
-            this.buttonAdd = new System.Windows.Forms.Button();
             this.buttonUpdate = new System.Windows.Forms.Button();
             this.comboBoxPhong = new System.Windows.Forms.ComboBox();
             this.txtSdt = new System.Windows.Forms.TextBox();
@@ -87,6 +90,10 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.Color.Transparent;
+            this.groupBox1.Controls.Add(this.label12);
+            this.groupBox1.Controls.Add(this.label11);
+            this.groupBox1.Controls.Add(this.txtBed);
+            this.groupBox1.Controls.Add(this.txtRoomType);
             this.groupBox1.Controls.Add(this.buttonAdd);
             this.groupBox1.Controls.Add(this.radioother);
             this.groupBox1.Controls.Add(this.radioFemale);
@@ -115,10 +122,54 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             this.groupBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.groupBox1.Location = new System.Drawing.Point(25, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(588, 582);
+            this.groupBox1.Size = new System.Drawing.Size(602, 650);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Nhập thông tin khách";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(324, 190);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(121, 25);
+            this.label12.TabIndex = 26;
+            this.label12.Text = "Loại Phòng";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(347, 250);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(50, 25);
+            this.label11.TabIndex = 25;
+            this.label11.Text = "Bed";
+            // 
+            // txtBed
+            // 
+            this.txtBed.Location = new System.Drawing.Point(449, 250);
+            this.txtBed.Name = "txtBed";
+            this.txtBed.Size = new System.Drawing.Size(123, 30);
+            this.txtBed.TabIndex = 24;
+            // 
+            // txtRoomType
+            // 
+            this.txtRoomType.Location = new System.Drawing.Point(449, 190);
+            this.txtRoomType.Name = "txtRoomType";
+            this.txtRoomType.Size = new System.Drawing.Size(123, 30);
+            this.txtRoomType.TabIndex = 23;
+            // 
+            // buttonAdd
+            // 
+            this.buttonAdd.BackColor = System.Drawing.Color.Aquamarine;
+            this.buttonAdd.ForeColor = System.Drawing.Color.Black;
+            this.buttonAdd.Location = new System.Drawing.Point(36, 469);
+            this.buttonAdd.Name = "buttonAdd";
+            this.buttonAdd.Size = new System.Drawing.Size(145, 63);
+            this.buttonAdd.TabIndex = 0;
+            this.buttonAdd.Text = "Add";
+            this.buttonAdd.UseVisualStyleBackColor = false;
+            this.buttonAdd.Click += new System.EventHandler(this.buttonAdd_Click);
             // 
             // radioother
             // 
@@ -166,51 +217,42 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             // 
             this.buttonRefresh.BackColor = System.Drawing.Color.DeepSkyBlue;
             this.buttonRefresh.ForeColor = System.Drawing.Color.Black;
-            this.buttonRefresh.Location = new System.Drawing.Point(269, 504);
+            this.buttonRefresh.Location = new System.Drawing.Point(241, 558);
             this.buttonRefresh.Name = "buttonRefresh";
             this.buttonRefresh.Size = new System.Drawing.Size(167, 72);
             this.buttonRefresh.TabIndex = 18;
             this.buttonRefresh.Text = "Refresh";
             this.buttonRefresh.UseVisualStyleBackColor = false;
+            this.buttonRefresh.Click += new System.EventHandler(this.buttonRefresh_Click);
             // 
             // buttonDelete
             // 
             this.buttonDelete.BackColor = System.Drawing.Color.Red;
             this.buttonDelete.ForeColor = System.Drawing.Color.Black;
-            this.buttonDelete.Location = new System.Drawing.Point(64, 504);
+            this.buttonDelete.Location = new System.Drawing.Point(36, 558);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(145, 72);
             this.buttonDelete.TabIndex = 17;
             this.buttonDelete.Text = "Delete";
             this.buttonDelete.UseVisualStyleBackColor = false;
-            // 
-            // buttonAdd
-            // 
-            this.buttonAdd.BackColor = System.Drawing.Color.Aquamarine;
-            this.buttonAdd.ForeColor = System.Drawing.Color.Black;
-            this.buttonAdd.Location = new System.Drawing.Point(64, 415);
-            this.buttonAdd.Name = "buttonAdd";
-            this.buttonAdd.Size = new System.Drawing.Size(145, 63);
-            this.buttonAdd.TabIndex = 0;
-            this.buttonAdd.Text = "Add";
-            this.buttonAdd.UseVisualStyleBackColor = false;
-            this.buttonAdd.Click += new System.EventHandler(this.buttonAdd_Click);
+            this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click_1);
             // 
             // buttonUpdate
             // 
             this.buttonUpdate.BackColor = System.Drawing.Color.Linen;
             this.buttonUpdate.ForeColor = System.Drawing.Color.Black;
-            this.buttonUpdate.Location = new System.Drawing.Point(269, 415);
+            this.buttonUpdate.Location = new System.Drawing.Point(241, 469);
             this.buttonUpdate.Name = "buttonUpdate";
             this.buttonUpdate.Size = new System.Drawing.Size(167, 63);
             this.buttonUpdate.TabIndex = 16;
             this.buttonUpdate.Text = "Update";
             this.buttonUpdate.UseVisualStyleBackColor = false;
+            this.buttonUpdate.Click += new System.EventHandler(this.buttonUpdate_Click_1);
             // 
             // comboBoxPhong
             // 
             this.comboBoxPhong.FormattingEnabled = true;
-            this.comboBoxPhong.Location = new System.Drawing.Point(118, 190);
+            this.comboBoxPhong.Location = new System.Drawing.Point(95, 211);
             this.comboBoxPhong.Name = "comboBoxPhong";
             this.comboBoxPhong.Size = new System.Drawing.Size(223, 33);
             this.comboBoxPhong.TabIndex = 15;
@@ -224,21 +266,21 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             // 
             // dateTimeCheckout
             // 
-            this.dateTimeCheckout.Location = new System.Drawing.Point(200, 360);
+            this.dateTimeCheckout.Location = new System.Drawing.Point(176, 399);
             this.dateTimeCheckout.Name = "dateTimeCheckout";
             this.dateTimeCheckout.Size = new System.Drawing.Size(200, 30);
             this.dateTimeCheckout.TabIndex = 13;
             // 
             // dateTimeCheckin
             // 
-            this.dateTimeCheckin.Location = new System.Drawing.Point(200, 310);
+            this.dateTimeCheckin.Location = new System.Drawing.Point(176, 349);
             this.dateTimeCheckin.Name = "dateTimeCheckin";
             this.dateTimeCheckin.Size = new System.Drawing.Size(200, 30);
             this.dateTimeCheckin.TabIndex = 12;
             // 
             // dateTimeDob
             // 
-            this.dateTimeDob.Location = new System.Drawing.Point(141, 248);
+            this.dateTimeDob.Location = new System.Drawing.Point(118, 301);
             this.dateTimeDob.Name = "dateTimeDob";
             this.dateTimeDob.Size = new System.Drawing.Size(200, 30);
             this.dateTimeDob.TabIndex = 11;
@@ -246,7 +288,7 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(30, 193);
+            this.label8.Location = new System.Drawing.Point(7, 214);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(74, 25);
             this.label8.TabIndex = 10;
@@ -255,7 +297,7 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(31, 365);
+            this.label7.Location = new System.Drawing.Point(7, 404);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(110, 25);
             this.label7.TabIndex = 9;
@@ -264,7 +306,7 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(30, 310);
+            this.label6.Location = new System.Drawing.Point(6, 349);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(148, 25);
             this.label6.TabIndex = 8;
@@ -291,7 +333,7 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(30, 248);
+            this.label3.Location = new System.Drawing.Point(7, 301);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(108, 25);
             this.label3.TabIndex = 5;
@@ -428,8 +470,8 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             // 
             // CustomerManagementForm
             // 
-            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
-            this.ClientSize = new System.Drawing.Size(1187, 596);
+            this.BackColor = System.Drawing.Color.Green;
+            this.ClientSize = new System.Drawing.Size(1187, 674);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -446,5 +488,10 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             this.ResumeLayout(false);
 
         }
+
+        private Label label12;
+        private Label label11;
+        private TextBox txtBed;
+        private TextBox txtRoomType;
     }
 }

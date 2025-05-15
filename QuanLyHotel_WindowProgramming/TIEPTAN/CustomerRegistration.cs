@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace QuanLyHotel_WindowProgramming.TIEPTAN
@@ -17,7 +10,49 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
         {
             InitializeComponent();
         }
-      
+
+        private void CustomerRegistration_Load(object sender, EventArgs e)
+        {
+            txtNationality.Items.AddRange(new string[] { "Việt Nam", "Mỹ", "Hàn Quốc" });
+
+            using (SqlConnection conn = Database.GetConnection())
+            {
+                conn.Open();
+
+                // Load RoomNo vào txtNoRoom
+                string roomNoQuery = "SELECT RoomNo FROM Room WHERE booked = 'NO'";
+                SqlCommand cmdRoomNo = new SqlCommand(roomNoQuery, conn);
+                SqlDataReader readerRoomNo = cmdRoomNo.ExecuteReader();
+                while (readerRoomNo.Read())
+                {
+                    txtNoRoom.Items.Add(readerRoomNo["RoomNo"].ToString());
+                }
+                readerRoomNo.Close();
+
+                // Load các loại giường duy nhất
+                string bedQuery = "SELECT DISTINCT Bed FROM Room";
+                SqlCommand cmdBed = new SqlCommand(bedQuery, conn);
+                SqlDataReader readerBed = cmdBed.ExecuteReader();
+                while (readerBed.Read())
+                {
+                    txtBed.Items.Add(readerBed["Bed"].ToString());
+                }
+                readerBed.Close();
+
+                // Load các loại phòng duy nhất
+                string typeQuery = "SELECT DISTINCT RoomType FROM Room";
+                SqlCommand cmdType = new SqlCommand(typeQuery, conn);
+                SqlDataReader readerType = cmdType.ExecuteReader();
+                while (readerType.Read())
+                {
+                    txtType.Items.Add(readerType["RoomType"].ToString());
+                }
+                readerType.Close();
+            }
+
+            txtNoRoom.SelectedIndexChanged += TxtNoRoom_SelectedIndexChanged;
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             try
@@ -39,9 +74,9 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
                     conn.Open();
 
                     string insertCustomer = @"INSERT INTO customer 
-                (CustomerName, Phone, Nationality, Gender, Dob, Cccd, Address, checkin, checkout, roomid)
-                VALUES 
-                (@Name, @Phone, @Nationality, @Gender, @Dob, @Cccd, @Address, @Checkin, @Checkout, @RoomId)";
+                    (CustomerName, Phone, Nationality, Gender, Dob, Cccd, Address, checkin, checkout, roomid)
+                    VALUES 
+                    (@Name, @Phone, @Nationality, @Gender, @Dob, @Cccd, @Address, @Checkin, @Checkout, @RoomId)";
 
                     SqlCommand cmd = new SqlCommand(insertCustomer, conn);
                     cmd.Parameters.AddWithValue("@Name", name);
@@ -71,30 +106,35 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
                 MessageBox.Show("Lỗi khi lưu dữ liệu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void CustomerRegistration_Load(object sender, EventArgs e)
-        {
-            // Load dữ liệu mẫu
-            txtNationality.Items.AddRange(new string[] { "Việt Nam", "Mỹ", "Hàn Quốc" });
-            txtBed.Items.AddRange(new string[] { "Single", "Double" });
-            txtType.Items.AddRange(new string[] { "Standard", "Deluxe", "VIP" });
-            txtNoRoom.Items.AddRange(new string[] { "101", "102", "201", "202" });
 
-            // Mặc định giá
-            txtPrice.Text = "500000"; // ví dụ 500.000 VND/ngày
+        private void txtCheckin_ValueChanged(object sender, EventArgs e)
+        {
+            TinhTien();
         }
-        private void txtCheckOut_ValueChanged(object sender, EventArgs e)
+
+        private void txtCheckOut_ValueChanged_1(object sender, EventArgs e)
+        {
+            TinhTien();
+        }
+
+        private void TinhTien()
         {
             int days = (txtCheckOut.Value.Date - txtCheckin.Value.Date).Days;
             days = Math.Max(days, 1); // ít nhất 1 ngày
 
             txtStayed.Text = days.ToString();
 
-            if (int.TryParse(txtPrice.Text, out int price))
+            if (int.TryParse(textBoxGiaPhong.Text, out int pricePerDay)) // Lấy giá mỗi ngày từ textbox giá gốc
             {
-                int total = days * price;
-                labelTotalPrice.Text = $"Tổng giá: {total:N0} VND";
+                int total = days * pricePerDay;
+                txtPrice.Text = total.ToString(); // Gán tổng giá tiền vào ô txtPrice
+            }
+            else
+            {
+                txtPrice.Text = "Lỗi giá tiền";
             }
         }
+
         private int GetRoomIdByRoomNo(string roomNo)
         {
             using (SqlConnection conn = Database.GetConnection())
@@ -115,55 +155,54 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
                 }
             }
         }
-
-        private void txtCheckOut_ValueChanged_1(object sender, EventArgs e)
+        private void TxtNoRoom_SelectedIndexChanged(object sender, EventArgs e)
         {
+            string roomNo = txtNoRoom.Text;
 
+            using (SqlConnection conn = Database.GetConnection())
+            {
+                conn.Open();
+                string query = "SELECT Price, RoomType, Bed FROM Room WHERE RoomNo = @RoomNo";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@RoomNo", roomNo);
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        int price = Convert.ToInt32(reader["Price"]);
+                        string roomType = reader["RoomType"].ToString();
+                        string bed = reader["Bed"].ToString();
+
+                        // Cập nhật giá, loại phòng và giường
+                        textBoxGiaPhong.Text = price.ToString();
+                        txtPrice.Text = price.ToString();
+
+                        txtType.Text = roomType;
+                        txtBed.Text = bed;
+
+                        // Tính tổng tiền
+                        TinhTien();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Không tìm thấy thông tin phòng!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                }
+            }
         }
 
-        private void labelStayed_Click(object sender, EventArgs e)
-        {
 
-        }
+        // Các sự kiện UI chưa dùng
+        private void labelStayed_Click(object sender, EventArgs e) { }
+        private void txtStayed_TextChanged(object sender, EventArgs e) { }
+        private void labelCheckOut_Click(object sender, EventArgs e) { }
+        private void label8_Click(object sender, EventArgs e) { }
+        private void label6_Click(object sender, EventArgs e) { }
+        private void txtCccd_TextChanged(object sender, EventArgs e) { }
+        private void label7_Click(object sender, EventArgs e) { }
+        private void txtAddress_TextChanged(object sender, EventArgs e) { }
 
-        private void txtStayed_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelCheckOut_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label8_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txtCheckin_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label6_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txtCccd_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label7_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txtAddress_TextChanged(object sender, EventArgs e)
-        {
-
-        }
     }
+
 }

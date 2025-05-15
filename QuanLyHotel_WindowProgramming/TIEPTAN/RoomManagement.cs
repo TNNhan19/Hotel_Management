@@ -26,15 +26,15 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             {
                 int roomId = Convert.ToInt32(dgvRooms.CurrentRow.Cells["RoomId"].Value);
 
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = Database.GetConnection())
                 {
                     string query = "UPDATE Room SET RoomNo=@RoomNo, RoomType=@RoomType, bed=@Bed, price=@Price, booked=@Booked WHERE RoomId=@RoomId";
                     SqlCommand cmd = new SqlCommand(query, conn);
                     cmd.Parameters.AddWithValue("@RoomNo", txtRoomNo.Text);
                     cmd.Parameters.AddWithValue("@RoomType", txtRoomType.Text);
-                    // cmd.Parameters.AddWithValue("@Bed", txtBed.Text);  
+                    cmd.Parameters.AddWithValue("@Bed", txtBed.Text);  
                     cmd.Parameters.AddWithValue("@Price", long.Parse(txtPrice.Text));
-                    // cmd.Parameters.AddWithValue("@Booked", cmbBooked.SelectedItem.ToString());  
+                    cmd.Parameters.AddWithValue("@Booked", cmbBooked.SelectedItem.ToString());  
                     cmd.Parameters.AddWithValue("@RoomId", roomId);
 
                     conn.Open();
@@ -84,10 +84,17 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             {
                 int roomId = Convert.ToInt32(dgvRooms.CurrentRow.Cells["RoomId"].Value);
 
+                // Kiểm tra xem phòng này có đang được sử dụng không
+                if (IsRoomInUse(roomId))
+                {
+                    MessageBox.Show("Không thể xóa phòng này vì đang được sử dụng bởi khách hàng.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 DialogResult result = MessageBox.Show("Bạn có chắc muốn xóa phòng này?", "Xác nhận", MessageBoxButtons.YesNo);
                 if (result == DialogResult.Yes)
                 {
-                    using (SqlConnection conn = new SqlConnection(connectionString))
+                    using (SqlConnection conn = Database.GetConnection())
                     {
                         string query = "DELETE FROM Room WHERE RoomId = @RoomId";
                         SqlCommand cmd = new SqlCommand(query, conn);
@@ -108,6 +115,23 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
                 MessageBox.Show("Vui lòng chọn phòng cần xóa!");
             }
         }
+
+        private bool IsRoomInUse(int roomId)
+        {
+            using (SqlConnection conn = Database.GetConnection())
+            {
+                string query = "SELECT COUNT(*) FROM Customer WHERE RoomId = @RoomId";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@RoomId", roomId);
+
+                conn.Open();
+                int count = (int)cmd.ExecuteScalar();
+                conn.Close();
+
+                return count > 0;
+            }
+        }
+
 
         private void dgvRooms_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {

@@ -21,14 +21,21 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             //cbType.Items.Add("Single");
             //cbType.Items.Add("Couple");
             this.setTypeCB();
+            this.setBedCB();
         }
         private void setTypeCB()
         {
-            cbType.Items.Add("AC");
-            cbType.Items.Add("Single");
-            cbType.Items.Add("Couple");
+            cbType.Items.Add("Standard");
+            cbType.Items.Add("Superior");
+            cbType.Items.Add("Deluxe");
+            cbType.Items.Add("Suite");
         }
-
+        private void setBedCB()
+        {
+            cbBed.Items.Add("Single");
+            cbBed.Items.Add("Double");
+            cbBed.Items.Add("Triple");
+        }
         private void AddRoom_Load(object sender, EventArgs e)
         {
             try
@@ -48,11 +55,11 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (txtRoomNo.Text != "" && cbType.Text != "" && txtBed.Text != "" && txtPrice.Text != "")
+            if (txtRoomNo.Text != "" && cbType.Text != "" && cbBed.Text != "" && txtPrice.Text != "")
             {
                 string roomNo = txtRoomNo.Text;
                 string type = cbType.Text;
-                string bed = txtBed.Text;
+                string bed = cbBed.Text;
                 string price = txtPrice.Text;
 
                 // Câu lệnh SQL thêm phòng mới

@@ -56,7 +56,6 @@
             this.txtGender = new System.Windows.Forms.TextBox();
             this.labelCheckOut = new System.Windows.Forms.Label();
             this.txtCheckOut = new System.Windows.Forms.DateTimePicker();
-            this.txtPrice = new System.Windows.Forms.TextBox();
             this.labelStayed = new System.Windows.Forms.Label();
             this.txtStayed = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -64,6 +63,7 @@
             this.textBoxGiaPhong = new System.Windows.Forms.TextBox();
             this.labelPriceRoom = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.txtPrice = new System.Windows.Forms.TextBox();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.SuspendLayout();
@@ -334,13 +334,6 @@
             this.txtCheckOut.TabIndex = 29;
             this.txtCheckOut.ValueChanged += new System.EventHandler(this.txtCheckOut_ValueChanged_1);
             // 
-            // txtPrice
-            // 
-            this.txtPrice.Location = new System.Drawing.Point(195, 232);
-            this.txtPrice.Name = "txtPrice";
-            this.txtPrice.Size = new System.Drawing.Size(200, 38);
-            this.txtPrice.TabIndex = 30;
-            // 
             // labelStayed
             // 
             this.labelStayed.AutoSize = true;
@@ -355,7 +348,7 @@
             // 
             // txtStayed
             // 
-            this.txtStayed.Location = new System.Drawing.Point(197, 166);
+            this.txtStayed.Location = new System.Drawing.Point(168, 166);
             this.txtStayed.Name = "txtStayed";
             this.txtStayed.Size = new System.Drawing.Size(200, 38);
             this.txtStayed.TabIndex = 32;
@@ -415,13 +408,13 @@
             // 
             this.groupBox3.BackColor = System.Drawing.Color.Transparent;
             this.groupBox3.Controls.Add(this.txtStayed);
-            this.groupBox3.Controls.Add(this.txtPrice);
             this.groupBox3.Controls.Add(this.labelStayed);
             this.groupBox3.Controls.Add(this.txtCheckOut);
             this.groupBox3.Controls.Add(this.labelCheckOut);
             this.groupBox3.Controls.Add(this.txtCheckin);
             this.groupBox3.Controls.Add(this.labelTotalPrice);
             this.groupBox3.Controls.Add(this.label8);
+            this.groupBox3.Controls.Add(this.txtPrice);
             this.groupBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox3.ForeColor = System.Drawing.Color.Red;
             this.groupBox3.Location = new System.Drawing.Point(597, 359);
@@ -430,6 +423,13 @@
             this.groupBox3.TabIndex = 35;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Thành tiền";
+            // 
+            // txtPrice
+            // 
+            this.txtPrice.Location = new System.Drawing.Point(168, 229);
+            this.txtPrice.Name = "txtPrice";
+            this.txtPrice.Size = new System.Drawing.Size(200, 38);
+            this.txtPrice.TabIndex = 30;
             // 
             // CustomerRegistration
             // 
@@ -498,7 +498,6 @@
         private System.Windows.Forms.TextBox txtGender;
         private System.Windows.Forms.Label labelCheckOut;
         private System.Windows.Forms.DateTimePicker txtCheckOut;
-        private System.Windows.Forms.TextBox txtPrice;
         private System.Windows.Forms.Label labelStayed;
         private System.Windows.Forms.TextBox txtStayed;
         private System.Windows.Forms.GroupBox groupBox1;
@@ -506,5 +505,6 @@
         private System.Windows.Forms.TextBox textBoxGiaPhong;
         private System.Windows.Forms.Label labelPriceRoom;
         private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.TextBox txtPrice;
     }
 }
