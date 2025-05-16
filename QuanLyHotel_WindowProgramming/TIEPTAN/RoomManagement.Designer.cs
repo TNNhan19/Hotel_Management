@@ -44,6 +44,7 @@
             this.dgvRooms.Size = new System.Drawing.Size(760, 217);
             this.dgvRooms.TabIndex = 0;
             this.dgvRooms.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvRooms_CellClick);
+            this.dgvRooms.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvRooms_CellContentClick_1);
             // 
             // txtRoomNo
             // 

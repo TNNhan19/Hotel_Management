@@ -165,6 +165,18 @@
     <Compile Include="TIEPTAN\CustomerRegistration.Designer.cs">
       <DependentUpon>CustomerRegistration.cs</DependentUpon>
     </Compile>
+    <Compile Include="TIEPTAN\FoodEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TIEPTAN\FoodEditForm.Designer.cs">
+      <DependentUpon>FoodEditForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TIEPTAN\FoodListForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TIEPTAN\FoodListForm.Designer.cs">
+      <DependentUpon>FoodListForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="TIEPTAN\FoodManagement.cs">
       <SubType>Form</SubType>
     </Compile>

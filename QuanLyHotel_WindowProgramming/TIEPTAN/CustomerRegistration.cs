@@ -67,16 +67,37 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
 
                 DateTime checkin = txtCheckin.Value;
                 DateTime checkout = txtCheckOut.Value;
+
+                // Validation 1: Check checkout date is after checkin date
+                if (checkout <= checkin)
+                {
+                    MessageBox.Show("Ngày trả phòng phải sau ngày nhận phòng.", "Lỗi ngày tháng", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 int roomId = GetRoomIdByRoomNo(txtNoRoom.Text); // Lấy RoomId từ RoomNo
 
                 using (SqlConnection conn = Database.GetConnection())
                 {
                     conn.Open();
 
+                    // Validation 2: Check if room is already booked
+                    string checkRoomStatus = "SELECT booked FROM Room WHERE RoomId = @RoomId";
+                    SqlCommand checkCmd = new SqlCommand(checkRoomStatus, conn);
+                    checkCmd.Parameters.AddWithValue("@RoomId", roomId);
+
+                    object result = checkCmd.ExecuteScalar();
+                    if (result != null && result.ToString().ToUpper() == "YES")
+                    {
+                        MessageBox.Show("Phòng đã được đặt. Vui lòng chọn phòng khác.", "Phòng đã được đặt", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    // Insert customer
                     string insertCustomer = @"INSERT INTO customer 
-                    (CustomerName, Phone, Nationality, Gender, Dob, Cccd, Address, checkin, checkout, roomid)
-                    VALUES 
-                    (@Name, @Phone, @Nationality, @Gender, @Dob, @Cccd, @Address, @Checkin, @Checkout, @RoomId)";
+            (CustomerName, Phone, Nationality, Gender, Dob, Cccd, Address, checkin, checkout, roomid)
+            VALUES 
+            (@Name, @Phone, @Nationality, @Gender, @Dob, @Cccd, @Address, @Checkin, @Checkout, @RoomId)";
 
                     SqlCommand cmd = new SqlCommand(insertCustomer, conn);
                     cmd.Parameters.AddWithValue("@Name", name);
@@ -92,7 +113,7 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
 
                     cmd.ExecuteNonQuery();
 
-                    // Cập nhật trạng thái phòng
+                    // Update room status
                     string updateRoom = "UPDATE Room SET booked = 'YES' WHERE RoomId = @RoomId";
                     SqlCommand cmd2 = new SqlCommand(updateRoom, conn);
                     cmd2.Parameters.AddWithValue("@RoomId", roomId);
@@ -106,6 +127,7 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
                 MessageBox.Show("Lỗi khi lưu dữ liệu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         private void txtCheckin_ValueChanged(object sender, EventArgs e)
         {

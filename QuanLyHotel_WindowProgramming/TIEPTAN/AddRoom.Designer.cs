@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddRoom));
             this.label1 = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.hotelManagementDataSet = new QuanLyHotel_WindowProgramming.HotelManagementDataSet();
@@ -54,9 +53,9 @@
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(27, 25);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(222, 32);
+            this.label1.Size = new System.Drawing.Size(240, 32);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Add New Room";
+            this.label1.Text = "Thêm phòng mới";
             // 
             // dataGridView1
             // 
@@ -105,9 +104,9 @@
             this.labelBed.AutoSize = true;
             this.labelBed.Location = new System.Drawing.Point(31, 252);
             this.labelBed.Name = "labelBed";
-            this.labelBed.Size = new System.Drawing.Size(32, 16);
+            this.labelBed.Size = new System.Drawing.Size(50, 16);
             this.labelBed.TabIndex = 4;
-            this.labelBed.Text = "Bed";
+            this.labelBed.Text = "Giường";
             // 
             // labelPrice
             // 
@@ -151,19 +150,20 @@
             // 
             // buttonAdd
             // 
-            this.buttonAdd.Location = new System.Drawing.Point(78, 405);
+            this.buttonAdd.BackColor = System.Drawing.Color.LawnGreen;
+            this.buttonAdd.Location = new System.Drawing.Point(65, 401);
             this.buttonAdd.Name = "buttonAdd";
             this.buttonAdd.Size = new System.Drawing.Size(162, 52);
             this.buttonAdd.TabIndex = 10;
-            this.buttonAdd.Text = "Add Room";
-            this.buttonAdd.UseVisualStyleBackColor = true;
+            this.buttonAdd.Text = "Thêm phòng";
+            this.buttonAdd.UseVisualStyleBackColor = false;
             this.buttonAdd.Click += new System.EventHandler(this.button1_Click);
             // 
             // AddRoom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
+            this.BackColor = System.Drawing.Color.MediumSeaGreen;
             this.ClientSize = new System.Drawing.Size(1141, 535);
             this.Controls.Add(this.buttonAdd);
             this.Controls.Add(this.cbBed);

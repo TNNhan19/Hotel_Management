@@ -58,9 +58,16 @@ namespace QuanLyHotel_WindowProgramming
                 foodManagement.ShowDialog();
         }
 
-        private void buttonDetailsCustomer_Click(object sender, EventArgs e)
+        private void btnAddFood_Click(object sender, EventArgs e)
         {
+            FoodEditForm foodEditForm = new FoodEditForm(); // Tạo đối tượng form
+            foodEditForm.ShowDialog();
+        }
 
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            FoodListForm foodListForm = new FoodListForm(); // Tạo đối tượng form
+            foodListForm.ShowDialog();
         }
     }
 }

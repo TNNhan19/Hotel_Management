@@ -99,12 +99,83 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
                          c.Checkin, c.Checkout, c.checkout_status, r.RoomNo
                          FROM customer c
                          JOIN Room r ON c.roomid = r.RoomId";
+
                 SqlDataAdapter da = new SqlDataAdapter(query, conn);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
+
+                // Clear existing columns and set manual mode
+                dataGridView1.Columns.Clear();
+                dataGridView1.AutoGenerateColumns = false;
+
+                // Add columns with readable headers
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "Id",
+                    HeaderText = "Customer ID"
+                });
+
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "CustomerName",
+                    HeaderText = "Name"
+                });
+
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "Phone",
+                    HeaderText = "Phone Number"
+                });
+
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "Gender",
+                    HeaderText = "Gender"
+                });
+
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "Dob",
+                    HeaderText = "Date of Birth",
+                    DefaultCellStyle = new DataGridViewCellStyle { Format = "dd/MM/yyyy" }
+                });
+
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "Cccd",
+                    HeaderText = "National ID"
+                });
+
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "Checkin",
+                    HeaderText = "Check-in",
+                    DefaultCellStyle = new DataGridViewCellStyle { Format = "dd/MM/yyyy" }
+                });
+
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "Checkout",
+                    HeaderText = "Check-out",
+                    DefaultCellStyle = new DataGridViewCellStyle { Format = "dd/MM/yyyy" }
+                });
+
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "checkout_status",
+                    HeaderText = "Checkout Status"
+                });
+
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "RoomNo",
+                    HeaderText = "Room Number"
+                });
+
                 dataGridView1.DataSource = dt;
             }
         }
+
         private void buttonSearch_Click(object sender, EventArgs e)
         {
             using (SqlConnection conn = Database.GetConnection())

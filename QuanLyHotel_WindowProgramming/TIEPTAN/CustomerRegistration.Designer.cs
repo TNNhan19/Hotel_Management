@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomerRegistration));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -74,9 +73,9 @@
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 28.2F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(15, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(235, 54);
+            this.label1.Size = new System.Drawing.Size(282, 54);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Customer";
+            this.label1.Text = "Khách hàng";
             // 
             // label2
             // 
@@ -85,9 +84,9 @@
             this.label2.ForeColor = System.Drawing.Color.Red;
             this.label2.Location = new System.Drawing.Point(56, 170);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(68, 25);
+            this.label2.Size = new System.Drawing.Size(104, 25);
             this.label2.TabIndex = 2;
-            this.label2.Text = "Name";
+            this.label2.Text = "Họ và tên";
             // 
             // label3
             // 
@@ -96,9 +95,9 @@
             this.label3.ForeColor = System.Drawing.Color.Red;
             this.label3.Location = new System.Drawing.Point(56, 261);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(107, 25);
+            this.label3.Size = new System.Drawing.Size(139, 25);
             this.label3.TabIndex = 3;
-            this.label3.Text = "No.Phone";
+            this.label3.Text = "Số điện thoại";
             // 
             // label4
             // 
@@ -118,9 +117,9 @@
             this.label5.ForeColor = System.Drawing.Color.Red;
             this.label5.Location = new System.Drawing.Point(56, 445);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(83, 25);
+            this.label5.Size = new System.Drawing.Size(91, 25);
             this.label5.TabIndex = 5;
-            this.label5.Text = "Gender";
+            this.label5.Text = "Giới tính";
             // 
             // label6
             // 
@@ -165,9 +164,9 @@
             this.label9.ForeColor = System.Drawing.Color.Red;
             this.label9.Location = new System.Drawing.Point(30, 59);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(50, 25);
+            this.label9.Size = new System.Drawing.Size(81, 25);
             this.label9.TabIndex = 9;
-            this.label9.Text = "Bed";
+            this.label9.Text = "Giường";
             // 
             // label10
             // 
@@ -290,7 +289,7 @@
             this.btnAlloteRoom.Name = "btnAlloteRoom";
             this.btnAlloteRoom.Size = new System.Drawing.Size(227, 86);
             this.btnAlloteRoom.TabIndex = 25;
-            this.btnAlloteRoom.Text = "Allote Room";
+            this.btnAlloteRoom.Text = "Đặt phòng";
             this.btnAlloteRoom.UseVisualStyleBackColor = false;
             this.btnAlloteRoom.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -301,13 +300,13 @@
             this.DateOfbirth.ForeColor = System.Drawing.Color.Red;
             this.DateOfbirth.Location = new System.Drawing.Point(330, 348);
             this.DateOfbirth.Name = "DateOfbirth";
-            this.DateOfbirth.Size = new System.Drawing.Size(129, 25);
+            this.DateOfbirth.Size = new System.Drawing.Size(108, 25);
             this.DateOfbirth.TabIndex = 26;
-            this.DateOfbirth.Text = "Date of birth";
+            this.DateOfbirth.Text = "Ngày sinh";
             // 
             // txtGender
             // 
-            this.txtGender.Location = new System.Drawing.Point(61, 502);
+            this.txtGender.Location = new System.Drawing.Point(60, 494);
             this.txtGender.Name = "txtGender";
             this.txtGender.Size = new System.Drawing.Size(200, 22);
             this.txtGender.TabIndex = 27;
@@ -339,7 +338,7 @@
             this.labelStayed.AutoSize = true;
             this.labelStayed.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelStayed.ForeColor = System.Drawing.Color.Red;
-            this.labelStayed.Location = new System.Drawing.Point(15, 166);
+            this.labelStayed.Location = new System.Drawing.Point(15, 178);
             this.labelStayed.Name = "labelStayed";
             this.labelStayed.Size = new System.Drawing.Size(133, 25);
             this.labelStayed.TabIndex = 31;
@@ -350,7 +349,7 @@
             // 
             this.txtStayed.Location = new System.Drawing.Point(168, 166);
             this.txtStayed.Name = "txtStayed";
-            this.txtStayed.Size = new System.Drawing.Size(200, 38);
+            this.txtStayed.Size = new System.Drawing.Size(214, 38);
             this.txtStayed.TabIndex = 32;
             this.txtStayed.TextChanged += new System.EventHandler(this.txtStayed_TextChanged);
             // 
@@ -359,7 +358,7 @@
             this.groupBox1.BackColor = System.Drawing.Color.Transparent;
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.ForeColor = System.Drawing.Color.Red;
-            this.groupBox1.Location = new System.Drawing.Point(45, 120);
+            this.groupBox1.Location = new System.Drawing.Point(24, 104);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(528, 434);
             this.groupBox1.TabIndex = 33;
@@ -428,14 +427,14 @@
             // 
             this.txtPrice.Location = new System.Drawing.Point(168, 229);
             this.txtPrice.Name = "txtPrice";
-            this.txtPrice.Size = new System.Drawing.Size(200, 38);
+            this.txtPrice.Size = new System.Drawing.Size(214, 38);
             this.txtPrice.TabIndex = 30;
             // 
             // CustomerRegistration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
+            this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(1200, 723);
             this.Controls.Add(this.txtGender);
             this.Controls.Add(this.DateOfbirth);

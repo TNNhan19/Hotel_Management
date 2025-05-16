@@ -119,7 +119,7 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             this.groupBox1.Controls.Add(this.txtName);
             this.groupBox1.Controls.Add(this.txtId);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.groupBox1.ForeColor = System.Drawing.Color.Black;
             this.groupBox1.Location = new System.Drawing.Point(25, 12);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(602, 650);
@@ -139,11 +139,11 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(347, 250);
+            this.label11.Location = new System.Drawing.Point(323, 250);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(50, 25);
+            this.label11.Size = new System.Drawing.Size(124, 25);
             this.label11.TabIndex = 25;
-            this.label11.Text = "Bed";
+            this.label11.Text = "Loại giường";
             // 
             // txtBed
             // 
@@ -268,14 +268,14 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             // 
             this.dateTimeCheckout.Location = new System.Drawing.Point(176, 399);
             this.dateTimeCheckout.Name = "dateTimeCheckout";
-            this.dateTimeCheckout.Size = new System.Drawing.Size(200, 30);
+            this.dateTimeCheckout.Size = new System.Drawing.Size(232, 30);
             this.dateTimeCheckout.TabIndex = 13;
             // 
             // dateTimeCheckin
             // 
             this.dateTimeCheckin.Location = new System.Drawing.Point(176, 349);
             this.dateTimeCheckin.Name = "dateTimeCheckin";
-            this.dateTimeCheckin.Size = new System.Drawing.Size(200, 30);
+            this.dateTimeCheckin.Size = new System.Drawing.Size(232, 30);
             this.dateTimeCheckin.TabIndex = 12;
             // 
             // dateTimeDob
@@ -308,9 +308,9 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(6, 349);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(148, 25);
+            this.label6.Size = new System.Drawing.Size(97, 25);
             this.label6.TabIndex = 8;
-            this.label6.Text = "Ngày check in";
+            this.label6.Text = "Check in";
             // 
             // label5
             // 
@@ -385,7 +385,7 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             this.groupBox2.Controls.Add(this.txtCheckCccd);
             this.groupBox2.Controls.Add(this.buttonSearch);
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.groupBox2.ForeColor = System.Drawing.Color.Black;
             this.groupBox2.Location = new System.Drawing.Point(633, 12);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(525, 188);
@@ -427,7 +427,7 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             this.groupBox3.Controls.Add(this.radioCheckout);
             this.groupBox3.Controls.Add(this.radiodango);
             this.groupBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.groupBox3.ForeColor = System.Drawing.Color.Black;
             this.groupBox3.Location = new System.Drawing.Point(633, 216);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(542, 337);
@@ -439,6 +439,7 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             // 
             this.dataGridView1.BackgroundColor = System.Drawing.Color.LightSkyBlue;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.GridColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.dataGridView1.Location = new System.Drawing.Point(23, 79);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 51;
@@ -470,7 +471,7 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             // 
             // CustomerManagementForm
             // 
-            this.BackColor = System.Drawing.Color.Green;
+            this.BackColor = System.Drawing.Color.MediumSeaGreen;
             this.ClientSize = new System.Drawing.Size(1187, 674);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);

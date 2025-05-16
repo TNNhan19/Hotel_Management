@@ -40,18 +40,61 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
         {
             try
             {
-                query = "select * from Room";
+                query = "SELECT * FROM Room";
                 DataSet ds = room.getData(query);
 
-                dataGridView1.AutoGenerateColumns = true;
+                // Clear existing columns
+                dataGridView1.Columns.Clear();
+
+                // Manually define columns with custom headers
+                dataGridView1.AutoGenerateColumns = false;
+
+                // Add columns with custom header text
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "RoomId",
+                    HeaderText = "Room ID"
+                });
+
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "RoomNo",
+                    HeaderText = "Room Number"
+                });
+
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "RoomType",
+                    HeaderText = "Type"
+                });
+
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "bed",
+                    HeaderText = "Bed type"
+                });
+
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "price",
+                    HeaderText = "Price"
+                });
+
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "booked",
+                    HeaderText = "Status"
+                });
+
+                // Bind data
                 dataGridView1.DataSource = ds.Tables[0];
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex.Message);
             }
-
         }
+
 
         private void button1_Click(object sender, EventArgs e)
         {

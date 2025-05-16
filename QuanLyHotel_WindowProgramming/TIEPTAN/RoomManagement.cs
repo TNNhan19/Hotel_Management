@@ -58,14 +58,55 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             using (SqlConnection conn = Database.GetConnection())
             {
                 conn.Open();
-                string query = "SELECT * FROM Room";
+                string query = "SELECT RoomId, RoomNo, RoomType, bed, price, booked FROM Room";
                 SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
                 DataTable dataTable = new DataTable();
                 adapter.Fill(dataTable);
+
+                dgvRooms.AutoGenerateColumns = false;
+                dgvRooms.Columns.Clear(); // Clear existing columns
+
+                dgvRooms.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "RoomId",
+                    HeaderText = "Room ID"
+                });
+
+                dgvRooms.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "RoomNo",
+                    HeaderText = "Room Number"
+                });
+
+                dgvRooms.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "RoomType",
+                    HeaderText = "Room Type"
+                });
+
+                dgvRooms.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "bed",
+                    HeaderText = "Bed Type"
+                });
+
+                dgvRooms.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "price",
+                    HeaderText = "Price",
+                    DefaultCellStyle = new DataGridViewCellStyle { Format = "N0" } // Thousand separator
+                });
+
+                dgvRooms.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "booked",
+                    HeaderText = "Status"
+                });
+
                 dgvRooms.DataSource = dataTable;
             }
-            
         }
+
 
         // Fix for CS0103: Adding the missing ClearForm method  
         private void ClearForm()
@@ -162,6 +203,11 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
                 txtPrice.Text = row.Cells["price"].Value.ToString();
                 cmbBooked.SelectedItem = row.Cells["booked"].Value.ToString();
             }
+        }
+
+        private void dgvRooms_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }
