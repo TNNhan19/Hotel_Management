@@ -69,5 +69,11 @@ namespace QuanLyHotel_WindowProgramming
             FoodListForm foodListForm = new FoodListForm(); // Tạo đối tượng form
             foodListForm.ShowDialog();
         }
+
+        private void btnStaffCheck_Click(object sender, EventArgs e)
+        {
+            StaffCheckForm staffCheckForm = new StaffCheckForm(); // Tạo đối tượng form
+            staffCheckForm.ShowDialog();
+        }
     }
 }

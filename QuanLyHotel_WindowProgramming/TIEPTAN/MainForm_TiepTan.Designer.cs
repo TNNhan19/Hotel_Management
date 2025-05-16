@@ -40,9 +40,11 @@
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.btnStaffCheck = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonManagementCustomer
@@ -169,12 +171,23 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.btnStaffCheck);
             this.groupBox4.Location = new System.Drawing.Point(816, 385);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(394, 285);
             this.groupBox4.TabIndex = 10;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Lao công";
+            // 
+            // btnStaffCheck
+            // 
+            this.btnStaffCheck.Location = new System.Drawing.Point(27, 45);
+            this.btnStaffCheck.Name = "btnStaffCheck";
+            this.btnStaffCheck.Size = new System.Drawing.Size(174, 113);
+            this.btnStaffCheck.TabIndex = 0;
+            this.btnStaffCheck.Text = "Kiểm tra thực phẩm ";
+            this.btnStaffCheck.UseVisualStyleBackColor = true;
+            this.btnStaffCheck.Click += new System.EventHandler(this.btnStaffCheck_Click);
             // 
             // MainForm_TiepTan
             // 
@@ -193,6 +206,7 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -210,5 +224,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Button btnStaffCheck;
     }
 }

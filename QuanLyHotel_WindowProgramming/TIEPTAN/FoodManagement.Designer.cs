@@ -15,6 +15,12 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
         private System.Windows.Forms.Label labelStatus;
         private System.Windows.Forms.Label labelNote;
 
+        private System.Windows.Forms.DataGridViewTextBoxColumn colFoodName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colQuantityIn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colQuantityOut;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDeviation;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colTotalPrice;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colUsageDate;
 
         private void InitializeComponent()
         {
@@ -22,10 +28,12 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             this.comboBoxRoom = new System.Windows.Forms.ComboBox();
             this.labelRoom = new System.Windows.Forms.Label();
             this.dataGridViewFood = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colFoodName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colQuantityIn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colQuantityOut = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colDeviation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colTotalPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colUsageDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnAddFood = new System.Windows.Forms.Button();
             this.btnRemoveFood = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
@@ -48,7 +56,7 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             // 
             this.labelRoom.AutoSize = true;
             this.labelRoom.BackColor = System.Drawing.Color.Silver;
-            this.labelRoom.Font = new System.Drawing.Font("Segoe UI Black", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelRoom.Font = new System.Drawing.Font("Segoe UI Black", 12F, System.Drawing.FontStyle.Bold);
             this.labelRoom.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.labelRoom.Location = new System.Drawing.Point(12, 23);
             this.labelRoom.Name = "labelRoom";
@@ -62,49 +70,59 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             this.dataGridViewFood.BackgroundColor = System.Drawing.Color.Cornsilk;
             this.dataGridViewFood.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewFood.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn1,
-            this.dataGridViewTextBoxColumn2,
-            this.dataGridViewTextBoxColumn3,
-            this.dataGridViewTextBoxColumn4});
+                this.colFoodName,
+                this.colQuantityIn,
+                this.colQuantityOut,
+                this.colDeviation,
+                this.colTotalPrice,
+                this.colUsageDate});
             this.dataGridViewFood.Location = new System.Drawing.Point(186, 23);
             this.dataGridViewFood.Name = "dataGridViewFood";
             this.dataGridViewFood.RowHeadersWidth = 51;
-            this.dataGridViewFood.Size = new System.Drawing.Size(554, 298);
+            this.dataGridViewFood.Size = new System.Drawing.Size(770, 298);
             this.dataGridViewFood.TabIndex = 2;
             // 
-            // dataGridViewTextBoxColumn1
+            // colFoodName
             // 
-            this.dataGridViewTextBoxColumn1.HeaderText = "Tên thực phẩm";
-            this.dataGridViewTextBoxColumn1.MinimumWidth = 6;
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.Width = 125;
+            this.colFoodName.HeaderText = "Tên thực phẩm";
+            this.colFoodName.Name = "FoodName";
+            this.colFoodName.Width = 125;
             // 
-            // dataGridViewTextBoxColumn2
+            // colQuantityIn
             // 
-            this.dataGridViewTextBoxColumn2.HeaderText = "Số lượng nhập";
-            this.dataGridViewTextBoxColumn2.MinimumWidth = 6;
-            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            this.dataGridViewTextBoxColumn2.Width = 125;
+            this.colQuantityIn.HeaderText = "Số lượng nhập";
+            this.colQuantityIn.Name = "QuantityIn";
+            this.colQuantityIn.Width = 125;
             // 
-            // dataGridViewTextBoxColumn3
+            // colQuantityOut
             // 
-            this.dataGridViewTextBoxColumn3.HeaderText = "Số lượng tiêu thụ";
-            this.dataGridViewTextBoxColumn3.MinimumWidth = 6;
-            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-            this.dataGridViewTextBoxColumn3.Width = 125;
+            this.colQuantityOut.HeaderText = "Số lượng tiêu thụ";
+            this.colQuantityOut.Name = "QuantityOut";
+            this.colQuantityOut.Width = 125;
             // 
-            // dataGridViewTextBoxColumn4
+            // colDeviation
             // 
-            this.dataGridViewTextBoxColumn4.HeaderText = "Sai lệch (%)";
-            this.dataGridViewTextBoxColumn4.MinimumWidth = 6;
-            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
-            this.dataGridViewTextBoxColumn4.Width = 125;
+            this.colDeviation.HeaderText = "Sai lệch (%)";
+            this.colDeviation.Name = "Deviation";
+            this.colDeviation.Width = 125;
+            // 
+            // colTotalPrice
+            // 
+            this.colTotalPrice.HeaderText = "Tổng tiền (VND)";
+            this.colTotalPrice.Name = "TotalPrice";
+            this.colTotalPrice.Width = 125;
+            // 
+            // colUsageDate
+            // 
+            this.colUsageDate.HeaderText = "Ngày thêm ";
+            this.colUsageDate.Name = "UsageDate";
+            this.colUsageDate.Width = 120;
             // 
             // btnAddFood
             // 
             this.btnAddFood.BackColor = System.Drawing.Color.Gold;
-            this.btnAddFood.Font = new System.Drawing.Font("Segoe UI Black", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAddFood.Location = new System.Drawing.Point(769, 37);
+            this.btnAddFood.Font = new System.Drawing.Font("Segoe UI Black", 12F, System.Drawing.FontStyle.Bold);
+            this.btnAddFood.Location = new System.Drawing.Point(974, 37);
             this.btnAddFood.Name = "btnAddFood";
             this.btnAddFood.Size = new System.Drawing.Size(148, 78);
             this.btnAddFood.TabIndex = 3;
@@ -115,8 +133,8 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             // btnRemoveFood
             // 
             this.btnRemoveFood.BackColor = System.Drawing.Color.PeachPuff;
-            this.btnRemoveFood.Font = new System.Drawing.Font("Segoe UI Black", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRemoveFood.Location = new System.Drawing.Point(769, 146);
+            this.btnRemoveFood.Font = new System.Drawing.Font("Segoe UI Black", 12F, System.Drawing.FontStyle.Bold);
+            this.btnRemoveFood.Location = new System.Drawing.Point(974, 146);
             this.btnRemoveFood.Name = "btnRemoveFood";
             this.btnRemoveFood.Size = new System.Drawing.Size(120, 49);
             this.btnRemoveFood.TabIndex = 4;
@@ -127,7 +145,7 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             // btnSave
             // 
             this.btnSave.BackColor = System.Drawing.Color.PaleGreen;
-            this.btnSave.Font = new System.Drawing.Font("Segoe UI Black", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSave.Font = new System.Drawing.Font("Segoe UI Black", 12F, System.Drawing.FontStyle.Bold);
             this.btnSave.Location = new System.Drawing.Point(186, 376);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(179, 88);
@@ -139,7 +157,7 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             // btnCheckDeviation
             // 
             this.btnCheckDeviation.BackColor = System.Drawing.Color.LightSkyBlue;
-            this.btnCheckDeviation.Font = new System.Drawing.Font("Segoe UI Black", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCheckDeviation.Font = new System.Drawing.Font("Segoe UI Black", 12F, System.Drawing.FontStyle.Bold);
             this.btnCheckDeviation.Location = new System.Drawing.Point(549, 376);
             this.btnCheckDeviation.Name = "btnCheckDeviation";
             this.btnCheckDeviation.Size = new System.Drawing.Size(191, 88);
@@ -169,7 +187,7 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             // FoodManagement
             // 
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
-            this.ClientSize = new System.Drawing.Size(929, 496);
+            this.ClientSize = new System.Drawing.Size(1140, 496);
             this.Controls.Add(this.comboBoxRoom);
             this.Controls.Add(this.labelRoom);
             this.Controls.Add(this.dataGridViewFood);
@@ -184,14 +202,6 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFood)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
-
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
     }
 }
-
-

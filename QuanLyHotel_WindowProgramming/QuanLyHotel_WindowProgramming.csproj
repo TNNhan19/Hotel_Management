@@ -236,6 +236,12 @@
     <Compile Include="TIEPTAN\RoomManagement.Designer.cs">
       <DependentUpon>RoomManagement.cs</DependentUpon>
     </Compile>
+    <Compile Include="TIEPTAN\StaffCheckForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TIEPTAN\StaffCheckForm.Designer.cs">
+      <DependentUpon>StaffCheckForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="LOGIN\ForgetPassword.resx">
       <DependentUpon>ForgetPassword.cs</DependentUpon>
     </EmbeddedResource>
@@ -283,6 +289,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TIEPTAN\RoomManagement.resx">
       <DependentUpon>RoomManagement.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TIEPTAN\StaffCheckForm.resx">
+      <DependentUpon>StaffCheckForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="HotelManagementDataSet.xsc">
       <DependentUpon>HotelManagementDataSet.xsd</DependentUpon>
