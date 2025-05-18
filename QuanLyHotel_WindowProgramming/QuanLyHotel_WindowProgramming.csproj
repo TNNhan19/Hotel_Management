@@ -79,6 +79,7 @@
       <HintPath>packages\System.Security.Cryptography.Xml.8.0.2\lib\net462\System.Security.Cryptography.Xml.dll</HintPath>
     </Reference>
     <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -268,6 +269,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="QUANLY\QuanLyNhanVien_ThemXoaSua.resx">
       <DependentUpon>QuanLyNhanVien_ThemXoaSua.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="QUANLY\TinhTienCuoiNgay.resx">
+      <DependentUpon>TinhTienCuoiNgay.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TIEPTAN\AddRoom.resx">
       <DependentUpon>AddRoom.cs</DependentUpon>

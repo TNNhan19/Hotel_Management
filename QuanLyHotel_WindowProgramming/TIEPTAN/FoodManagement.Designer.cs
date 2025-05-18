@@ -28,18 +28,19 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             this.comboBoxRoom = new System.Windows.Forms.ComboBox();
             this.labelRoom = new System.Windows.Forms.Label();
             this.dataGridViewFood = new System.Windows.Forms.DataGridView();
-            this.colFoodName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colQuantityIn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colQuantityOut = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colDeviation = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colTotalPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colUsageDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FoodName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.QuantityIn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.QuantityOut = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Deviation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TotalPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.UsageDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnAddFood = new System.Windows.Forms.Button();
             this.btnRemoveFood = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCheckDeviation = new System.Windows.Forms.Button();
             this.labelNote = new System.Windows.Forms.Label();
             this.labelStatus = new System.Windows.Forms.Label();
+            this.btnRefresh = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFood)).BeginInit();
             this.SuspendLayout();
             // 
@@ -49,7 +50,7 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             this.comboBoxRoom.FormattingEnabled = true;
             this.comboBoxRoom.Location = new System.Drawing.Point(12, 69);
             this.comboBoxRoom.Name = "comboBoxRoom";
-            this.comboBoxRoom.Size = new System.Drawing.Size(150, 24);
+            this.comboBoxRoom.Size = new System.Drawing.Size(150, 21);
             this.comboBoxRoom.TabIndex = 0;
             // 
             // labelRoom
@@ -60,7 +61,7 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             this.labelRoom.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.labelRoom.Location = new System.Drawing.Point(12, 23);
             this.labelRoom.Name = "labelRoom";
-            this.labelRoom.Size = new System.Drawing.Size(139, 28);
+            this.labelRoom.Size = new System.Drawing.Size(109, 21);
             this.labelRoom.TabIndex = 1;
             this.labelRoom.Text = "Chọn phòng:";
             // 
@@ -70,61 +71,62 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             this.dataGridViewFood.BackgroundColor = System.Drawing.Color.Cornsilk;
             this.dataGridViewFood.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewFood.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-                this.colFoodName,
-                this.colQuantityIn,
-                this.colQuantityOut,
-                this.colDeviation,
-                this.colTotalPrice,
-                this.colUsageDate});
+            this.FoodName,
+            this.QuantityIn,
+            this.QuantityOut,
+            this.Deviation,
+            this.TotalPrice,
+            this.UsageDate});
             this.dataGridViewFood.Location = new System.Drawing.Point(186, 23);
             this.dataGridViewFood.Name = "dataGridViewFood";
             this.dataGridViewFood.RowHeadersWidth = 51;
             this.dataGridViewFood.Size = new System.Drawing.Size(770, 298);
             this.dataGridViewFood.TabIndex = 2;
+            this.dataGridViewFood.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewFood_CellContentClick);
             // 
-            // colFoodName
+            // FoodName
             // 
-            this.colFoodName.HeaderText = "Tên thực phẩm";
-            this.colFoodName.Name = "FoodName";
-            this.colFoodName.Width = 125;
+            this.FoodName.HeaderText = "Tên thực phẩm";
+            this.FoodName.Name = "FoodName";
+            this.FoodName.Width = 125;
             // 
-            // colQuantityIn
+            // QuantityIn
             // 
-            this.colQuantityIn.HeaderText = "Số lượng nhập";
-            this.colQuantityIn.Name = "QuantityIn";
-            this.colQuantityIn.Width = 125;
+            this.QuantityIn.HeaderText = "Số lượng nhập";
+            this.QuantityIn.Name = "QuantityIn";
+            this.QuantityIn.Width = 125;
             // 
-            // colQuantityOut
+            // QuantityOut
             // 
-            this.colQuantityOut.HeaderText = "Số lượng tiêu thụ";
-            this.colQuantityOut.Name = "QuantityOut";
-            this.colQuantityOut.Width = 125;
+            this.QuantityOut.HeaderText = "Số lượng tiêu thụ";
+            this.QuantityOut.Name = "QuantityOut";
+            this.QuantityOut.Width = 125;
             // 
-            // colDeviation
+            // Deviation
             // 
-            this.colDeviation.HeaderText = "Sai lệch (%)";
-            this.colDeviation.Name = "Deviation";
-            this.colDeviation.Width = 125;
+            this.Deviation.HeaderText = "Sai lệch (%)";
+            this.Deviation.Name = "Deviation";
+            this.Deviation.Width = 125;
             // 
-            // colTotalPrice
+            // TotalPrice
             // 
-            this.colTotalPrice.HeaderText = "Tổng tiền (VND)";
-            this.colTotalPrice.Name = "TotalPrice";
-            this.colTotalPrice.Width = 125;
+            this.TotalPrice.HeaderText = "Tổng tiền (VND)";
+            this.TotalPrice.Name = "TotalPrice";
+            this.TotalPrice.Width = 125;
             // 
-            // colUsageDate
+            // UsageDate
             // 
-            this.colUsageDate.HeaderText = "Ngày thêm ";
-            this.colUsageDate.Name = "UsageDate";
-            this.colUsageDate.Width = 120;
+            this.UsageDate.HeaderText = "Ngày thêm ";
+            this.UsageDate.Name = "UsageDate";
+            this.UsageDate.Width = 120;
             // 
             // btnAddFood
             // 
             this.btnAddFood.BackColor = System.Drawing.Color.Gold;
             this.btnAddFood.Font = new System.Drawing.Font("Segoe UI Black", 12F, System.Drawing.FontStyle.Bold);
-            this.btnAddFood.Location = new System.Drawing.Point(974, 37);
+            this.btnAddFood.Location = new System.Drawing.Point(974, 78);
             this.btnAddFood.Name = "btnAddFood";
-            this.btnAddFood.Size = new System.Drawing.Size(148, 78);
+            this.btnAddFood.Size = new System.Drawing.Size(120, 53);
             this.btnAddFood.TabIndex = 3;
             this.btnAddFood.Text = "+ Thêm thực phẩm";
             this.btnAddFood.UseVisualStyleBackColor = false;
@@ -181,13 +183,26 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             this.labelStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
             this.labelStatus.Location = new System.Drawing.Point(23, 410);
             this.labelStatus.Name = "labelStatus";
-            this.labelStatus.Size = new System.Drawing.Size(0, 18);
+            this.labelStatus.Size = new System.Drawing.Size(0, 15);
             this.labelStatus.TabIndex = 8;
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.BackColor = System.Drawing.Color.BlueViolet;
+            this.btnRefresh.Font = new System.Drawing.Font("Segoe UI Black", 12F, System.Drawing.FontStyle.Bold);
+            this.btnRefresh.Location = new System.Drawing.Point(974, 214);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(120, 49);
+            this.btnRefresh.TabIndex = 9;
+            this.btnRefresh.Text = "Làm mới";
+            this.btnRefresh.UseVisualStyleBackColor = false;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
             // FoodManagement
             // 
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.ClientSize = new System.Drawing.Size(1140, 496);
+            this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.comboBoxRoom);
             this.Controls.Add(this.labelRoom);
             this.Controls.Add(this.dataGridViewFood);
@@ -202,6 +217,15 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFood)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
+
+        private DataGridViewTextBoxColumn FoodName;
+        private DataGridViewTextBoxColumn QuantityIn;
+        private DataGridViewTextBoxColumn QuantityOut;
+        private DataGridViewTextBoxColumn Deviation;
+        private DataGridViewTextBoxColumn TotalPrice;
+        private DataGridViewTextBoxColumn UsageDate;
+        private Button btnRefresh;
     }
 }

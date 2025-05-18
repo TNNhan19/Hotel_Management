@@ -169,5 +169,81 @@ namespace QuanLyHotel_WindowProgramming
             document.Add(pdfTable);
             document.Close();
         }
+        public DataTable GenerateWorkShiftAssignments(DateTime date)
+        {
+            DataTable schedule = new DataTable();
+            schedule.Columns.Add("hr_id", typeof(int));
+            schedule.Columns.Add("fname", typeof(string));
+            schedule.Columns.Add("lname", typeof(string));
+            schedule.Columns.Add("role", typeof(string));
+            schedule.Columns.Add("check_in", typeof(DateTime));
+            schedule.Columns.Add("check_out", typeof(DateTime));
+
+            Dictionary<string, int> dayShiftNeeds = new Dictionary<string, int> { { "Tiếp Tân", 2 }, { "Quản Lý", 1 }, { "Lao Công", 4 } };
+            Dictionary<string, int> nightShiftNeeds = new Dictionary<string, int> { { "Tiếp Tân", 1 }, { "Lao Công", 1 } };
+            Dictionary<string, int> weekendShiftNeeds = new Dictionary<string, int> { { "Tiếp Tân", 1 }, { "Lao Công", 3 } };
+
+            bool isWeekend = date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday;
+            var shiftNeeds = isWeekend ? weekendShiftNeeds : nightShiftNeeds;
+
+            var allHR = new List<(int id, string fname, string lname, string role)>();
+
+            using (SqlCommand cmd = new SqlCommand("SELECT Id, fname, lname, role FROM HR", db.getConnection))
+            {
+                db.openConnection();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        allHR.Add((
+                            reader.GetInt32(0),
+                            reader.GetString(1),
+                            reader.GetString(2),
+                            reader.GetString(3).Trim()
+                        ));
+                    }
+                }
+                db.closeConnection();
+            }
+
+            // Ca ngày: 7h–19h
+            if (!isWeekend)
+            {
+                DateTime checkIn = date.Date.AddHours(7);
+                DateTime checkOut = date.Date.AddHours(19);
+
+                foreach (var role in dayShiftNeeds.Keys)
+                {
+                    var available = allHR.Where(hr => hr.role == role).Take(dayShiftNeeds[role]).ToList();
+                    foreach (var hr in available)
+                    {
+                        schedule.Rows.Add(hr.id, hr.fname, hr.lname, hr.role, checkIn, checkOut);
+                    }
+                }
+            }
+
+            // Ca đêm: 20h hôm nay đến 6h hôm sau
+            {
+                DateTime nightIn = date.Date.AddHours(20);
+                DateTime nightOut = date.Date.AddDays(1).AddHours(6);
+
+                foreach (var role in shiftNeeds.Keys)
+                {
+                    // Nếu cần 1 Tiếp Tân hoặc Quản Lý — chọn từ 2 nhóm gộp
+                    List<(int id, string fname, string lname, string role)> available;
+                    if (role == "Tiếp Tân")
+                        available = allHR.Where(hr => hr.role == "Tiếp Tân" || hr.role == "Quản Lý").ToList();
+                    else
+                        available = allHR.Where(hr => hr.role == role).ToList();
+
+                    foreach (var hr in available.Take(shiftNeeds[role]))
+                    {
+                        schedule.Rows.Add(hr.id, hr.fname, hr.lname, hr.role, nightIn, nightOut);
+                    }
+                }
+            }
+
+            return schedule;
+        }
     }
 }

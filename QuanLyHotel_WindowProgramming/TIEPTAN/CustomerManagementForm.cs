@@ -13,393 +13,385 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
 {
     public partial class CustomerManagementForm : Form
     {
+        private SqlConnection conn;
         public CustomerManagementForm()
         {
             InitializeComponent();
+            conn = Database.GetConnection();
+            LoadCustomers();
         }
-
-
-
-        private void buttonAdd_Click(object sender, EventArgs e)
+        private void LoadCustomers()
         {
             try
             {
-                using (SqlConnection conn = Database.GetConnection())
-                {
+                if (conn.State != ConnectionState.Open)
                     conn.Open();
-                    string query = @"INSERT INTO customer 
-                            (CustomerName, Phone, Nationality, Gender, Dob, Cccd, Address, checkin, checkout, checkout_status, roomid)
-                            VALUES 
-                            (@name, @phone, @nation, @gender, @dob, @cccd, @address, @checkin, @checkout, @status, @roomid)";
 
-                    SqlCommand cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@name", txtName.Text);
-                    cmd.Parameters.AddWithValue("@phone", txtSdt.Text);
-                    cmd.Parameters.AddWithValue("@nation", "Việt Nam"); // Hoặc có thể từ một textbox nếu cần
-                    cmd.Parameters.AddWithValue("@gender", GetSelectedGender());
-                    cmd.Parameters.AddWithValue("@dob", dateTimeDob.Value);
-                    cmd.Parameters.AddWithValue("@cccd", txtcccd.Text);
-                    cmd.Parameters.AddWithValue("@address", ""); // nếu có thêm txtAddress
-                    cmd.Parameters.AddWithValue("@checkin", dateTimeCheckin.Value);
-                    cmd.Parameters.AddWithValue("@checkout", dateTimeCheckout.Value);
-                    cmd.Parameters.AddWithValue("@status", radioCheckout.Checked ? 1 : 0);
-                    cmd.Parameters.AddWithValue("@roomid", Convert.ToInt32(comboBoxPhong.SelectedValue)); // Phải binding trước đó
+                string query = @"
+            SELECT c.Id, c.CustomerName, c.Cccd, c.Phone, c.Address, c.Birth, c.Gender, 
+                   c.checkin, c.checkout, c.checkout_status, c.roomid, c.MoneyRoom, c.MoneyFood, c.TotalMoney, 
+                   r.RoomNo, r.bed, r.RoomType, r.price
+            FROM customer c
+            JOIN Room r ON c.roomid = r.RoomId";
+                SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
+                DataTable dt = new DataTable();
+                adapter.Fill(dt);
 
-                    int rows = cmd.ExecuteNonQuery();
-                    if (rows > 0)
-                        MessageBox.Show("Thêm khách thành công!");
-                    else
-                        MessageBox.Show("Thêm khách thất bại.");
-                    string updateRoom = "UPDATE Room SET booked = 'YES' WHERE RoomId = @roomid";
-                    SqlCommand updateCmd = new SqlCommand(updateRoom, conn);
-                    updateCmd.Parameters.AddWithValue("@roomid", Convert.ToInt32(comboBoxPhong.SelectedValue));
-                    updateCmd.ExecuteNonQuery();
+                dgvCustomers.AutoGenerateColumns = false;
+                dgvCustomers.Columns.Clear();
+
+                dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "Id",
+                    HeaderText = "ID Khách",
+                    Name = "Id"
+                });
+                dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "CustomerName",
+                    HeaderText = "Tên Khách",
+                    Name = "CustomerName"
+                });
+                dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "Cccd",
+                    HeaderText = "CCCD",
+                    Name = "Cccd"
+                });
+                dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "Phone",
+                    HeaderText = "Số Điện Thoại",
+                    Name = "Phone"
+                });
+                dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "Address",
+                    HeaderText = "Địa Chỉ",
+                    Name = "Address"
+                });
+                dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "Birth",
+                    HeaderText = "Ngày Sinh",
+                    Name = "Birth"
+                });
+                dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "Gender",
+                    HeaderText = "Giới Tính",
+                    Name = "Gender"
+                });
+                dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "checkin",
+                    HeaderText = "Ngày Check-In",
+                    Name = "checkin"
+                });
+                dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "checkout",
+                    HeaderText = "Ngày Check-Out",
+                    Name = "checkout"
+                });
+                dgvCustomers.Columns.Add(new DataGridViewCheckBoxColumn()
+                {
+                    DataPropertyName = "checkout_status",
+                    HeaderText = "Trạng Thái Thanh Toán",
+                    Name = "checkout_status"
+                });
+                dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "RoomNo",
+                    HeaderText = "Phòng",
+                    Name = "RoomNo"
+                });
+                dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "MoneyRoom",
+                    HeaderText = "Tiền Phòng",
+                    Name = "MoneyRoom",
+                    DefaultCellStyle = new DataGridViewCellStyle { Format = "N0" }
+                });
+                dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "MoneyFood",
+                    HeaderText = "Tiền Đồ Ăn",
+                    Name = "MoneyFood",
+                    DefaultCellStyle = new DataGridViewCellStyle { Format = "N0" }
+                });
+                dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "TotalMoney",
+                    HeaderText = "Tổng Tiền",
+                    Name = "TotalMoney",
+                    DefaultCellStyle = new DataGridViewCellStyle { Format = "N0" }
+                });
+                dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "roomid",
+                    HeaderText = "RoomId",
+                    Name = "roomid",
+                    Visible = false
+                });
+                dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "bed",
+                    HeaderText = "Giường",
+                    Name = "bed"
+                });
+                dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "RoomType",
+                    HeaderText = "Loại Phòng",
+                    Name = "RoomType"
+                });
+                dgvCustomers.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "price",
+                    HeaderText = "Giá",
+                    Name = "price",
+                    DefaultCellStyle = new DataGridViewCellStyle { Format = "N0" }
+                });
+
+                dgvCustomers.DataSource = dt;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+        private long CalculateFoodCost(int roomId)
+        {
+            long totalFoodCost = 0;
+            try
+            {
+                if (conn.State != ConnectionState.Open)
+                    conn.Open();
+
+                string query = @"
+            SELECT f.Price, r.QuantityOut
+            FROM RoomFoodUsage r
+            JOIN Food f ON r.FoodId = f.FoodId
+            WHERE r.RoomId = @RoomId";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@RoomId", roomId);
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    int? quantityOut = reader["QuantityOut"] != DBNull.Value ? Convert.ToInt32(reader["QuantityOut"]) : (int?)null;
+                    long price = Convert.ToInt64(reader["Price"]);
+                    if (quantityOut.HasValue)
+                    {
+                        totalFoodCost += quantityOut.Value * price;
+                    }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi: " + ex.Message);
+                MessageBox.Show("Lỗi khi tính tiền đồ ăn: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-        private string GetSelectedGender()
-        {
-            if (radioMale.Checked) return "Nam";
-            if (radioFemale.Checked) return "Nữ";
-            return "Khác";
-        }
-        private void LoadRoomList()
-        {
-            using (SqlConnection conn = Database.GetConnection())
+            finally
             {
-                conn.Open();
-                string query = "SELECT RoomId, RoomNo FROM Room WHERE booked = 'NO'";
-                SqlDataAdapter da = new SqlDataAdapter(query, conn);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-
-                comboBoxPhong.DataSource = dt;
-                comboBoxPhong.DisplayMember = "RoomNo";
-                comboBoxPhong.ValueMember = "RoomId";
-                comboBoxPhong.SelectionChangeCommitted += comboBoxPhong_SelectionChangeCommitted;
-
+                conn.Close();
             }
+            return totalFoodCost;
         }
 
-        private void CustomerManagementForm_Load(object sender, EventArgs e)
-        {
-            LoadRoomList();
-            LoadCustomerList();
-        }
-        private void LoadCustomerList()
-        {
-            using (SqlConnection conn = Database.GetConnection())
-            {
-                conn.Open();
-                string query = @"SELECT c.Id, c.CustomerName, c.Phone, c.Gender, c.Dob, c.Cccd, 
-                         c.Checkin, c.Checkout, c.checkout_status, r.RoomNo
-                         FROM customer c
-                         JOIN Room r ON c.roomid = r.RoomId";
-
-                SqlDataAdapter da = new SqlDataAdapter(query, conn);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-
-                // Clear existing columns and set manual mode
-                dataGridView1.Columns.Clear();
-                dataGridView1.AutoGenerateColumns = false;
-
-                // Add columns with readable headers
-                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
-                {
-                    DataPropertyName = "Id",
-                    HeaderText = "Customer ID"
-                });
-
-                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
-                {
-                    DataPropertyName = "CustomerName",
-                    HeaderText = "Name"
-                });
-
-                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
-                {
-                    DataPropertyName = "Phone",
-                    HeaderText = "Phone Number"
-                });
-
-                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
-                {
-                    DataPropertyName = "Gender",
-                    HeaderText = "Gender"
-                });
-
-                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
-                {
-                    DataPropertyName = "Dob",
-                    HeaderText = "Date of Birth",
-                    DefaultCellStyle = new DataGridViewCellStyle { Format = "dd/MM/yyyy" }
-                });
-
-                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
-                {
-                    DataPropertyName = "Cccd",
-                    HeaderText = "National ID"
-                });
-
-                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
-                {
-                    DataPropertyName = "Checkin",
-                    HeaderText = "Check-in",
-                    DefaultCellStyle = new DataGridViewCellStyle { Format = "dd/MM/yyyy" }
-                });
-
-                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
-                {
-                    DataPropertyName = "Checkout",
-                    HeaderText = "Check-out",
-                    DefaultCellStyle = new DataGridViewCellStyle { Format = "dd/MM/yyyy" }
-                });
-
-                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
-                {
-                    DataPropertyName = "checkout_status",
-                    HeaderText = "Checkout Status"
-                });
-
-                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
-                {
-                    DataPropertyName = "RoomNo",
-                    HeaderText = "Room Number"
-                });
-
-                dataGridView1.DataSource = dt;
-            }
-        }
-
-        private void buttonSearch_Click(object sender, EventArgs e)
-        {
-            using (SqlConnection conn = Database.GetConnection())
-            {
-                conn.Open();
-                string query = @"SELECT c.Id, c.CustomerName, c.Phone, c.Gender, c.Dob, c.Cccd, 
-                         c.Checkin, c.Checkout, c.checkout_status, r.RoomNo
-                         FROM customer c
-                         JOIN Room r ON c.roomid = r.RoomId
-                         WHERE c.Cccd = @cccd";
-
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@cccd", txtCheckCccd.Text);
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-                dataGridView1.DataSource = dt;
-            }
-        }
-        private void buttonDelete_Click(object sender, EventArgs e)
-        {
-            if (dataGridView1.SelectedRows.Count > 0)
-            {
-                int customerId = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["Id"].Value);
-                int roomId = GetRoomIdFromCustomer(customerId);
-
-                using (SqlConnection conn = Database.GetConnection())
-                {
-                    conn.Open();
-
-                    string deleteQuery = "DELETE FROM customer WHERE Id = @id";
-                    SqlCommand cmd = new SqlCommand(deleteQuery, conn);
-                    cmd.Parameters.AddWithValue("@id", customerId);
-                    cmd.ExecuteNonQuery();
-
-                    // Giải phóng phòng nếu khách đã check-out
-                    string updateRoom = "UPDATE Room SET booked = 'NO' WHERE RoomId = @roomid";
-                    SqlCommand cmdRoom = new SqlCommand(updateRoom, conn);
-                    cmdRoom.Parameters.AddWithValue("@roomid", roomId);
-                    cmdRoom.ExecuteNonQuery();
-
-                    MessageBox.Show("Đã xóa khách.");
-                    LoadCustomerList();
-                    LoadRoomList();
-                }
-            }
-        }
-
-        private int GetRoomIdFromCustomer(int customerId)
-        {
-            using (SqlConnection conn = Database.GetConnection())
-            {
-                conn.Open();
-                string query = "SELECT roomid FROM customer WHERE Id = @id";
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@id", customerId);
-                return (int)cmd.ExecuteScalar();
-            }
-        }
         private void buttonUpdate_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.SelectedRows.Count > 0)
+            if (dgvCustomers.CurrentRow == null)
             {
-                int customerId = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["Id"].Value);
+                MessageBox.Show("Vui lòng chọn khách hàng để cập nhật!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-                using (SqlConnection conn = Database.GetConnection())
+            int customerId = Convert.ToInt32(dgvCustomers.CurrentRow.Cells["Id"].Value);
+            bool checkoutStatus = checkBoxThanhToan.Checked;
+            int roomId = Convert.ToInt32(dgvCustomers.CurrentRow.Cells["roomid"].Value ?? 0);
+            long moneyFood = CalculateFoodCost(roomId);
+            long moneyRoom = Convert.ToInt64(dgvCustomers.CurrentRow.Cells["MoneyRoom"].Value ?? 0);
+            long totalMoney = moneyRoom + moneyFood;
+
+            // Kiểm tra giá trị có vượt quá giới hạn của INT không
+            if (moneyRoom > int.MaxValue || moneyFood > int.MaxValue || totalMoney > int.MaxValue)
+            {
+                MessageBox.Show("Giá trị tiền phòng, tiền đồ ăn hoặc tổng tiền vượt quá giới hạn cho phép!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Kiểm tra roomid có tồn tại trong bảng Room không
+            bool roomExists = false;
+            try
+            {
+                conn.Open();
+                string checkRoomQuery = "SELECT COUNT(*) FROM Room WHERE RoomId = @RoomId";
+                using (SqlCommand checkCmd = new SqlCommand(checkRoomQuery, conn))
                 {
-                    conn.Open();
-                    string query = @"UPDATE customer SET 
-                            CustomerName = @name,
-                            Phone = @phone,
-                            Gender = @gender,
-                            Dob = @dob,
-                            Cccd = @cccd,
-                            checkin = @checkin,
-                            checkout = @checkout,
-                            checkout_status = @status
-                            WHERE Id = @id";
-
-                    SqlCommand cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@name", txtName.Text);
-                    cmd.Parameters.AddWithValue("@phone", txtSdt.Text);
-                    cmd.Parameters.AddWithValue("@gender", GetSelectedGender());
-                    cmd.Parameters.AddWithValue("@dob", dateTimeDob.Value);
-                    cmd.Parameters.AddWithValue("@cccd", txtcccd.Text);
-                    cmd.Parameters.AddWithValue("@checkin", dateTimeCheckin.Value);
-                    cmd.Parameters.AddWithValue("@checkout", dateTimeCheckout.Value);
-                    cmd.Parameters.AddWithValue("@status", radioCheckout.Checked ? 1 : 0);
-                    cmd.Parameters.AddWithValue("@id", customerId);
-
-                    cmd.ExecuteNonQuery();
-                    MessageBox.Show("Cập nhật thành công!");
-                    LoadCustomerList();
+                    checkCmd.Parameters.AddWithValue("@RoomId", roomId);
+                    int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+                    roomExists = count > 0;
                 }
             }
-        }
-        private void CheckOutCustomer(int customerId, int roomId)
-        {
-            using (SqlConnection conn = Database.GetConnection())
+            catch (Exception ex)
             {
-                conn.Open();
-                string query = @"UPDATE customer SET 
-                                checkout_status = 1, 
-                                checkout = GETDATE() 
-                                WHERE Id = @id";
-
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@id", customerId);
-                cmd.ExecuteNonQuery();
-
-                string updateRoom = "UPDATE Room SET booked = 'NO' WHERE RoomId = @roomid";
-                SqlCommand cmdRoom = new SqlCommand(updateRoom, conn);
-                cmdRoom.Parameters.AddWithValue("@roomid", roomId);
-                cmdRoom.ExecuteNonQuery();
+                MessageBox.Show("Lỗi khi kiểm tra phòng: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
-        }
-        private void comboBoxPhong_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-            int selectedRoomId = Convert.ToInt32(comboBoxPhong.SelectedValue);
-            using (SqlConnection conn = Database.GetConnection())
+            finally
+            {
+                conn.Close();
+            }
+
+            if (roomId > 0 && !roomExists)
+            {
+                MessageBox.Show("Phòng không tồn tại trong hệ thống!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            try
             {
                 conn.Open();
-                string query = "SELECT RoomType, Bed FROM Room WHERE RoomId = @roomId";
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@roomId", selectedRoomId);
+                SqlTransaction transaction = conn.BeginTransaction();
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.Transaction = transaction;
 
-                using (SqlDataReader reader = cmd.ExecuteReader())
+                try
                 {
-                    if (reader.Read())
+                    cmd.CommandText = @"
+                UPDATE customer 
+                SET checkout_status = @CheckoutStatus, 
+                    MoneyFood = @MoneyFood, 
+                    TotalMoney = @TotalMoney 
+                WHERE Id = @CustomerId";
+                    cmd.Parameters.AddWithValue("@CheckoutStatus", checkoutStatus ? 1 : 0);
+                    cmd.Parameters.AddWithValue("@MoneyFood", moneyFood);
+                    cmd.Parameters.AddWithValue("@TotalMoney", totalMoney);
+                    cmd.Parameters.AddWithValue("@CustomerId", customerId);
+                    cmd.ExecuteNonQuery();
+
+                    // Cập nhật trạng thái booked của phòng nếu khách thanh toán
+                    if (checkoutStatus && roomId > 0)
                     {
-                        txtRoomType.Text = reader["RoomType"].ToString(); // textbox hoặc combobox
-                        txtBed.Text = reader["Bed"].ToString();
+                        cmd.Parameters.Clear();
+                        cmd.CommandText = "UPDATE Room SET booked = 'NO' WHERE RoomId = @RoomId";
+                        cmd.Parameters.AddWithValue("@RoomId", roomId);
+                        cmd.ExecuteNonQuery();
                     }
+
+                    transaction.Commit();
+                    MessageBox.Show("Cập nhật trạng thái thanh toán thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadCustomers();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-        }
-        private void CustomerManagementForm_Activated(object sender, EventArgs e)
-        {
-            LoadCustomerList(); // luôn cập nhật lại danh sách mỗi khi form quay lại
-        }
-
-        private void buttonDelete_Click_1(object sender, EventArgs e)
-        {
-            if (dataGridView1.SelectedRows.Count > 0)
+            catch (Exception ex)
             {
-                int customerId = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["Id"].Value);
-                int roomId = GetRoomIdFromCustomer(customerId);
+                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
 
-                using (SqlConnection conn = Database.GetConnection())
-                {
-                    conn.Open();
+        private void dgvCustomers_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
 
-                    string deleteQuery = "DELETE FROM customer WHERE Id = @id";
-                    SqlCommand cmd = new SqlCommand(deleteQuery, conn);
-                    cmd.Parameters.AddWithValue("@id", customerId);
-                    cmd.ExecuteNonQuery();
+            DataGridViewRow row = dgvCustomers.Rows[e.RowIndex];
 
-                    string updateRoom = "UPDATE Room SET booked = 'NO' WHERE RoomId = @roomid";
-                    SqlCommand cmdRoom = new SqlCommand(updateRoom, conn);
-                    cmdRoom.Parameters.AddWithValue("@roomid", roomId);
-                    cmdRoom.ExecuteNonQuery();
+            // Gán giá trị cho các control
+            txtName.Text = row.Cells["CustomerName"]?.Value?.ToString() ?? string.Empty;
+            txtCccd.Text = row.Cells["Cccd"]?.Value?.ToString() ?? string.Empty;
+            txtPhone.Text = row.Cells["Phone"]?.Value?.ToString() ?? string.Empty;
+            txtAddress.Text = row.Cells["Address"]?.Value?.ToString() ?? string.Empty;
 
-                    MessageBox.Show("Đã xóa khách.");
-                    LoadCustomerList(); // cập nhật lại danh sách
-                    LoadRoomList();     // cập nhật lại danh sách phòng trống
-                }
+            if (DateTime.TryParse(row.Cells["Birth"]?.Value?.ToString(), out DateTime birth))
+                DateTimePickerBirth.Value = birth;
+            else
+                DateTimePickerBirth.Value = DateTime.Today;
+
+            // Xử lý RadioButton cho giới tính
+            string gender = row.Cells["Gender"]?.Value?.ToString() ?? string.Empty;
+            radioMale.Checked = gender == "Nam";
+            radioFemale.Checked = gender == "Nữ";
+            radioOther.Checked = (gender != "Nam" && gender != "Nữ");
+
+            if (DateTime.TryParse(row.Cells["checkin"]?.Value?.ToString(), out DateTime checkin))
+                DateTimePickerCheckIn.Value = checkin;
+            else
+                DateTimePickerCheckIn.Value = DateTime.Today;
+
+            // Kiểm tra nếu checkout là NULL
+            if (row.Cells["checkout"]?.Value == null || row.Cells["checkout"].Value == DBNull.Value)
+            {
+                DateTimePickerCheckOut.Value = DateTime.Today;
+                DateTimePickerCheckOut.Enabled = false;
+                checkBoxThanhToan.Enabled = false;
+                checkBoxThanhToan.Checked = false;
             }
             else
             {
-                MessageBox.Show("Vui lòng chọn một khách hàng để xóa.");
+                if (DateTime.TryParse(row.Cells["checkout"]?.Value?.ToString(), out DateTime checkout))
+                    DateTimePickerCheckOut.Value = checkout;
+                else
+                    DateTimePickerCheckOut.Value = DateTime.Today;
+                DateTimePickerCheckOut.Enabled = true;
+                checkBoxThanhToan.Enabled = true;
             }
+
+            txtRoomNo.Text = row.Cells["RoomNo"]?.Value?.ToString() ?? string.Empty;
+            cbBed.Text = row.Cells["bed"]?.Value?.ToString() ?? string.Empty;
+            cbType.Text = row.Cells["RoomType"]?.Value?.ToString() ?? string.Empty;
+            txtPrice.Text = row.Cells["price"]?.Value != null
+                ? Convert.ToInt64(row.Cells["price"].Value).ToString("N0")
+                : "0";
+            long moneyRoom = row.Cells["MoneyRoom"]?.Value != null ? Convert.ToInt64(row.Cells["MoneyRoom"].Value) : 0;
+            txtMoneyRoom.Text = moneyRoom.ToString("N0");
+
+            // Tính tiền đồ ăn dựa trên roomid
+            int roomId = 0;
+            if (row.Cells["roomid"]?.Value != null && int.TryParse(row.Cells["roomid"].Value.ToString(), out int parsedRoomId))
+            {
+                roomId = parsedRoomId;
+            }
+            long moneyFood = CalculateFoodCost(roomId);
+            txtMoneyFood.Text = moneyFood.ToString("N0");
+
+            // Tính tổng tiền
+            long totalMoney = moneyRoom + moneyFood;
+            txtTotalMoney.Text = totalMoney.ToString("N0");
+
+            // Cập nhật trạng thái CheckBox
+            bool checkoutStatus = false;
+            if (row.Cells["checkout_status"]?.Value != null)
+            {
+                if (bool.TryParse(row.Cells["checkout_status"].Value.ToString(), out bool parsedStatus))
+                    checkoutStatus = parsedStatus;
+                else if (row.Cells["checkout_status"].Value is int intStatus)
+                    checkoutStatus = intStatus != 0;
+            }
+            checkBoxThanhToan.Checked = checkoutStatus;
         }
 
-        private void buttonUpdate_Click_1(object sender, EventArgs e)
+        private void buttonDelete_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.SelectedRows.Count > 0)
-            {
-                int customerId = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["Id"].Value);
 
-                using (SqlConnection conn = Database.GetConnection())
-                {
-                    conn.Open();
-                    string query = @"UPDATE customer SET 
-                            CustomerName = @name,
-                            Phone = @phone,
-                            Gender = @gender,
-                            Dob = @dob,
-                            Cccd = @cccd,
-                            checkin = @checkin,
-                            checkout = @checkout,
-                            checkout_status = @status
-                            WHERE Id = @id";
-
-                    SqlCommand cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@name", txtName.Text);
-                    cmd.Parameters.AddWithValue("@phone", txtSdt.Text);
-                    cmd.Parameters.AddWithValue("@gender", GetSelectedGender());
-                    cmd.Parameters.AddWithValue("@dob", dateTimeDob.Value);
-                    cmd.Parameters.AddWithValue("@cccd", txtcccd.Text);
-                    cmd.Parameters.AddWithValue("@checkin", dateTimeCheckin.Value);
-                    cmd.Parameters.AddWithValue("@checkout", dateTimeCheckout.Value);
-                    cmd.Parameters.AddWithValue("@status", radioCheckout.Checked ? 1 : 0);
-                    cmd.Parameters.AddWithValue("@id", customerId);
-
-                    cmd.ExecuteNonQuery();
-                    MessageBox.Show("Cập nhật thành công!");
-                    LoadCustomerList();
-                }
-            }
-            else
-            {
-                MessageBox.Show("Vui lòng chọn một khách hàng để cập nhật.");
-            }
         }
 
-        private void buttonRefresh_Click(object sender, EventArgs e)
+        private void btnRefresh_Click(object sender, EventArgs e)
         {
-            LoadCustomerList();
-            LoadRoomList(); // Nếu cần làm mới cả danh sách phòng
-            MessageBox.Show("Danh sách đã được làm mới.");
+
         }
     }
-
-
-
-
 }

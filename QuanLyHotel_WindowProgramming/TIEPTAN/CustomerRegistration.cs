@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 
@@ -6,225 +7,221 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
 {
     public partial class CustomerRegistration : Form
     {
+        private SqlConnection conn;
         public CustomerRegistration()
         {
             InitializeComponent();
+            conn = Database.GetConnection();
+            LoadRooms();
         }
-
-        private void CustomerRegistration_Load(object sender, EventArgs e)
+        private void LoadRooms()
         {
-            txtNationality.Items.AddRange(new string[] { "Việt Nam", "Mỹ", "Hàn Quốc" });
-
-            using (SqlConnection conn = Database.GetConnection())
+            using (SqlConnection localConn = Database.GetConnection())
             {
-                conn.Open();
-
-                // Load RoomNo vào txtNoRoom
-                string roomNoQuery = "SELECT RoomNo FROM Room WHERE booked = 'NO'";
-                SqlCommand cmdRoomNo = new SqlCommand(roomNoQuery, conn);
-                SqlDataReader readerRoomNo = cmdRoomNo.ExecuteReader();
-                while (readerRoomNo.Read())
+                try
                 {
-                    txtNoRoom.Items.Add(readerRoomNo["RoomNo"].ToString());
-                }
-                readerRoomNo.Close();
+                    localConn.Open();
+                    string query = "SELECT RoomId, RoomNo, RoomType, bed, price FROM Room WHERE booked = 'NO'";
+                    SqlDataAdapter da = new SqlDataAdapter(query, localConn);
+                    System.Data.DataTable dt = new System.Data.DataTable();
+                    da.Fill(dt);
+                    dgvRoom.DataSource = dt;
+                    cbRoomID.DataSource = dt;
+                    cbRoomID.DisplayMember = "RoomId";
+                    cbRoomID.ValueMember = "RoomId";
 
-                // Load các loại giường duy nhất
-                string bedQuery = "SELECT DISTINCT Bed FROM Room";
-                SqlCommand cmdBed = new SqlCommand(bedQuery, conn);
-                SqlDataReader readerBed = cmdBed.ExecuteReader();
-                while (readerBed.Read())
-                {
-                    txtBed.Items.Add(readerBed["Bed"].ToString());
-                }
-                readerBed.Close();
-
-                // Load các loại phòng duy nhất
-                string typeQuery = "SELECT DISTINCT RoomType FROM Room";
-                SqlCommand cmdType = new SqlCommand(typeQuery, conn);
-                SqlDataReader readerType = cmdType.ExecuteReader();
-                while (readerType.Read())
-                {
-                    txtType.Items.Add(readerType["RoomType"].ToString());
-                }
-                readerType.Close();
-            }
-
-            txtNoRoom.SelectedIndexChanged += TxtNoRoom_SelectedIndexChanged;
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                string name = txtName.Text;
-                string phone = txtPhone.Text;
-                string nationality = txtNationality.Text;
-                string gender = txtGender.Text;
-                DateTime dob = txtDob.Value;
-                string cccd = txtCccd.Text;
-                string address = txtAddress.Text;
-
-                DateTime checkin = txtCheckin.Value;
-                DateTime checkout = txtCheckOut.Value;
-
-                // Validation 1: Check checkout date is after checkin date
-                if (checkout <= checkin)
-                {
-                    MessageBox.Show("Ngày trả phòng phải sau ngày nhận phòng.", "Lỗi ngày tháng", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                int roomId = GetRoomIdByRoomNo(txtNoRoom.Text); // Lấy RoomId từ RoomNo
-
-                using (SqlConnection conn = Database.GetConnection())
-                {
-                    conn.Open();
-
-                    // Validation 2: Check if room is already booked
-                    string checkRoomStatus = "SELECT booked FROM Room WHERE RoomId = @RoomId";
-                    SqlCommand checkCmd = new SqlCommand(checkRoomStatus, conn);
-                    checkCmd.Parameters.AddWithValue("@RoomId", roomId);
-
-                    object result = checkCmd.ExecuteScalar();
-                    if (result != null && result.ToString().ToUpper() == "YES")
+                    if (dt.Rows.Count == 0)
                     {
-                        MessageBox.Show("Phòng đã được đặt. Vui lòng chọn phòng khác.", "Phòng đã được đặt", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
-                    }
-
-                    // Insert customer
-                    string insertCustomer = @"INSERT INTO customer 
-            (CustomerName, Phone, Nationality, Gender, Dob, Cccd, Address, checkin, checkout, roomid)
-            VALUES 
-            (@Name, @Phone, @Nationality, @Gender, @Dob, @Cccd, @Address, @Checkin, @Checkout, @RoomId)";
-
-                    SqlCommand cmd = new SqlCommand(insertCustomer, conn);
-                    cmd.Parameters.AddWithValue("@Name", name);
-                    cmd.Parameters.AddWithValue("@Phone", phone);
-                    cmd.Parameters.AddWithValue("@Nationality", nationality);
-                    cmd.Parameters.AddWithValue("@Gender", gender);
-                    cmd.Parameters.AddWithValue("@Dob", dob);
-                    cmd.Parameters.AddWithValue("@Cccd", cccd);
-                    cmd.Parameters.AddWithValue("@Address", address);
-                    cmd.Parameters.AddWithValue("@Checkin", checkin);
-                    cmd.Parameters.AddWithValue("@Checkout", checkout);
-                    cmd.Parameters.AddWithValue("@RoomId", roomId);
-
-                    cmd.ExecuteNonQuery();
-
-                    // Update room status
-                    string updateRoom = "UPDATE Room SET booked = 'YES' WHERE RoomId = @RoomId";
-                    SqlCommand cmd2 = new SqlCommand(updateRoom, conn);
-                    cmd2.Parameters.AddWithValue("@RoomId", roomId);
-                    cmd2.ExecuteNonQuery();
-                }
-
-                MessageBox.Show("Đặt phòng thành công!", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi khi lưu dữ liệu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-
-        private void txtCheckin_ValueChanged(object sender, EventArgs e)
-        {
-            TinhTien();
-        }
-
-        private void txtCheckOut_ValueChanged_1(object sender, EventArgs e)
-        {
-            TinhTien();
-        }
-
-        private void TinhTien()
-        {
-            int days = (txtCheckOut.Value.Date - txtCheckin.Value.Date).Days;
-            days = Math.Max(days, 1); // ít nhất 1 ngày
-
-            txtStayed.Text = days.ToString();
-
-            if (int.TryParse(textBoxGiaPhong.Text, out int pricePerDay)) // Lấy giá mỗi ngày từ textbox giá gốc
-            {
-                int total = days * pricePerDay;
-                txtPrice.Text = total.ToString(); // Gán tổng giá tiền vào ô txtPrice
-            }
-            else
-            {
-                txtPrice.Text = "Lỗi giá tiền";
-            }
-        }
-
-        private int GetRoomIdByRoomNo(string roomNo)
-        {
-            using (SqlConnection conn = Database.GetConnection())
-            {
-                conn.Open();
-                string query = "SELECT RoomId FROM Room WHERE RoomNo = @RoomNo";
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@RoomNo", roomNo);
-
-                object result = cmd.ExecuteScalar();
-                if (result != null)
-                {
-                    return Convert.ToInt32(result);
-                }
-                else
-                {
-                    throw new Exception("Không tìm thấy phòng!");
-                }
-            }
-        }
-        private void TxtNoRoom_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string roomNo = txtNoRoom.Text;
-
-            using (SqlConnection conn = Database.GetConnection())
-            {
-                conn.Open();
-                string query = "SELECT Price, RoomType, Bed FROM Room WHERE RoomNo = @RoomNo";
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@RoomNo", roomNo);
-
-                using (SqlDataReader reader = cmd.ExecuteReader())
-                {
-                    if (reader.Read())
-                    {
-                        int price = Convert.ToInt32(reader["Price"]);
-                        string roomType = reader["RoomType"].ToString();
-                        string bed = reader["Bed"].ToString();
-
-                        // Cập nhật giá, loại phòng và giường
-                        textBoxGiaPhong.Text = price.ToString();
-                        txtPrice.Text = price.ToString();
-
-                        txtType.Text = roomType;
-                        txtBed.Text = bed;
-
-                        // Tính tổng tiền
-                        TinhTien();
+                        MessageBox.Show("Không có phòng trống để đăng ký!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        cbRoomID.Enabled = false;
                     }
                     else
                     {
-                        MessageBox.Show("Không tìm thấy thông tin phòng!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        cbRoomID.SelectedIndexChanged -= cbRoomID_SelectedIndexChanged; // chống sự kiện lặp
+                        cbRoomID.SelectedIndex = 0;
+                        cbRoomID.SelectedIndexChanged += cbRoomID_SelectedIndexChanged;
                     }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
 
+        private void cbRoomID_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbRoomID.SelectedValue == null || cbRoomID.SelectedValue == DBNull.Value)
+                return;
 
-        // Các sự kiện UI chưa dùng
-        private void labelStayed_Click(object sender, EventArgs e) { }
-        private void txtStayed_TextChanged(object sender, EventArgs e) { }
-        private void labelCheckOut_Click(object sender, EventArgs e) { }
-        private void label8_Click(object sender, EventArgs e) { }
-        private void label6_Click(object sender, EventArgs e) { }
-        private void txtCccd_TextChanged(object sender, EventArgs e) { }
-        private void label7_Click(object sender, EventArgs e) { }
-        private void txtAddress_TextChanged(object sender, EventArgs e) { }
+            if (!(cbRoomID.SelectedValue is int roomId))
+            {
+                if (cbRoomID.SelectedValue is System.Data.DataRowView drv &&
+                    int.TryParse(drv["RoomId"].ToString(), out int parsedId))
+                {
+                    roomId = parsedId;
+                }
+                else
+                {
+                    MessageBox.Show("ID phòng không hợp lệ!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
 
+            try
+            {
+                if (conn.State != ConnectionState.Open)
+                    conn.Open();
+
+                string query = "SELECT RoomType, bed, price FROM Room WHERE RoomId = @RoomId";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@RoomId", roomId);
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    cbType.Text = reader["RoomType"].ToString();
+                    cbBed.Text = reader["bed"].ToString();
+                    txtPriceRoom.Text = reader["price"].ToString();
+                }
+                else
+                {
+                    MessageBox.Show("Không tìm thấy thông tin phòng!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        private void btnAlloteRoom_Click(object sender, EventArgs e)
+        {
+            // Kiểm tra control tồn tại
+            if (txtName == null || txtCccd == null || txtPhone == null || txtAddress == null ||
+                cbRoomID == null || txtPriceRoom == null || DateTimePickerBirth == null ||
+                DateTimePickerCheckIn == null || DateTimePickerCheckOut == null)
+            {
+                MessageBox.Show("Một số thành phần giao diện chưa được khởi tạo đúng!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Kiểm tra dữ liệu bắt buộc
+            if (string.IsNullOrWhiteSpace(txtName.Text) || string.IsNullOrWhiteSpace(txtCccd.Text) ||
+                string.IsNullOrWhiteSpace(txtPhone.Text) || string.IsNullOrWhiteSpace(txtAddress.Text) ||
+                cbRoomID.SelectedValue == null || string.IsNullOrWhiteSpace(txtPriceRoom.Text))
+            {
+                MessageBox.Show("Vui lòng nhập đầy đủ thông tin!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Giá mỗi ngày
+            if (!long.TryParse(txtPriceRoom.Text, out long pricePerDay))
+            {
+                MessageBox.Show("Giá phòng không hợp lệ!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Ngày check-in và check-out phải hợp lệ
+            if (DateTimePickerCheckIn.Value < new DateTime(1753, 1, 1) || DateTimePickerCheckOut.Value < new DateTime(1753, 1, 1))
+            {
+                MessageBox.Show("Ngày nhận phòng và trả phòng phải từ năm 1753 trở đi!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            int totalDays = (DateTimePickerCheckOut.Value - DateTimePickerCheckIn.Value).Days;
+            if (totalDays <= 0)
+            {
+                MessageBox.Show("Ngày trả phòng phải lớn hơn ngày nhận phòng!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            long moneyRoom = totalDays * pricePerDay;
+            long moneyFood = 0; // tạm thời 0
+            long totalMoney = moneyRoom + moneyFood;
+
+            // Xác định giới tính
+            string gender = radioMale != null && radioMale.Checked ? "Nam" :
+                            radioFemale != null && radioFemale.Checked ? "Nữ" : "Khác";
+
+            try
+            {
+                conn.Open();
+                SqlTransaction transaction = conn.BeginTransaction();
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.Transaction = transaction;
+
+                try
+                {
+                    // Insert khách hàng mới
+                    cmd.CommandText = @"
+                INSERT INTO customer (CustomerName, Cccd, Phone, Address, Birth, Gender, checkin, checkout, checkout_status, roomid, MoneyRoom, MoneyFood, TotalMoney)
+                VALUES (@Name, @Cccd, @Phone, @Address, @Birth, @Gender, @CheckIn, @CheckOut, 0, @RoomId, @MoneyRoom, @MoneyFood, @TotalMoney)";
+
+                    cmd.Parameters.AddWithValue("@Name", txtName.Text);
+                    cmd.Parameters.AddWithValue("@Cccd", txtCccd.Text);
+                    cmd.Parameters.AddWithValue("@Phone", txtPhone.Text);
+                    cmd.Parameters.AddWithValue("@Address", txtAddress.Text);
+                    cmd.Parameters.AddWithValue("@Birth", DateTimePickerBirth.Value);
+                    cmd.Parameters.AddWithValue("@Gender", gender);
+                    cmd.Parameters.AddWithValue("@CheckIn", DateTimePickerCheckIn.Value);
+                    cmd.Parameters.AddWithValue("@CheckOut", DateTimePickerCheckOut.Value);
+                    cmd.Parameters.AddWithValue("@RoomId", Convert.ToInt32(cbRoomID.SelectedValue));
+                    cmd.Parameters.AddWithValue("@MoneyRoom", moneyRoom);
+                    cmd.Parameters.AddWithValue("@MoneyFood", moneyFood);
+                    cmd.Parameters.AddWithValue("@TotalMoney", totalMoney);
+                    cmd.ExecuteNonQuery();
+
+                    // Cập nhật phòng đã được đặt
+                    cmd.Parameters.Clear();
+                    cmd.CommandText = "UPDATE Room SET booked = 'YES' WHERE RoomId = @RoomId";
+                    cmd.Parameters.AddWithValue("@RoomId", Convert.ToInt32(cbRoomID.SelectedValue));
+                    cmd.ExecuteNonQuery();
+
+                    transaction.Commit();
+                    MessageBox.Show("Đặt phòng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadRooms();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    MessageBox.Show("Lỗi khi lưu dữ liệu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi kết nối: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        private void btnTinhTien_Click(object sender, EventArgs e)
+        {
+            if (!long.TryParse(txtPriceRoom.Text, out long price))
+            {
+                MessageBox.Show("Giá phòng không hợp lệ!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            int totalDays = (DateTimePickerCheckOut.Value - DateTimePickerCheckIn.Value).Days;
+            if (totalDays <= 0)
+            {
+                MessageBox.Show("Ngày trả phòng phải lớn hơn ngày nhận phòng!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            long totalPrice = totalDays * price;
+
+            txtTotalDays.Text = totalDays.ToString();
+            txtTotalPrice.Text = totalPrice.ToString("N0"); // định dạng tiền có dấu chấm
+        }
     }
 
 }

@@ -23,7 +23,7 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
                 dataGridViewFood.Columns.Add("QuantityIn", "Số lượng nhập");
                 dataGridViewFood.Columns.Add("QuantityOut", "Số lượng tiêu thụ");
                 dataGridViewFood.Columns.Add("Deviation", "Sai lệch (%)");
-                dataGridViewFood.Columns.Add("TotalPrice", "Tổng tiền (VND)");
+                dataGridViewFood.Columns.Add("TotalPrice", "Thành tiền (VND)");
             }
         }
 
@@ -53,6 +53,7 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
         private void LoadFoodUsageForRoom(int roomId)
         {
             dataGridViewFood.Rows.Clear();
+            long grandTotal = 0;
 
             using (SqlConnection conn = Database.GetConnection())
             {
@@ -71,18 +72,29 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
                 while (reader.Read())
                 {
                     string name = reader["FoodName"].ToString();
-                    string inQty = reader["QuantityIn"].ToString();
-                    string outQty = reader["QuantityOut"]?.ToString() ?? "";
-                    string price = reader["Price"].ToString();
+                    int quantityIn = Convert.ToInt32(reader["QuantityIn"]);
+                    int? quantityOut = reader["QuantityOut"] != DBNull.Value ? Convert.ToInt32(reader["QuantityOut"]) : (int?)null;
+                    long price = Convert.ToInt64(reader["Price"]);
 
-                    string total = "";
-                    if (int.TryParse(outQty, out int used) && int.TryParse(price, out int unitPrice))
+                    string quantityOutDisplay = quantityOut.HasValue ? quantityOut.ToString() : "";
+                    long totalPrice = quantityOut.HasValue ? quantityOut.Value * price : 0;
+
+                    if (quantityOut.HasValue)
                     {
-                        total = (used * unitPrice).ToString("N0");
+                        grandTotal += totalPrice;
                     }
 
-                    dataGridViewFood.Rows.Add(name, inQty, outQty, "", total); // Sai lệch sẽ tính sau
+                    dataGridViewFood.Rows.Add(name, quantityIn, quantityOutDisplay, "", totalPrice.ToString("N0"));
                 }
+                reader.Close();
+            }
+
+            // Add summary row for grand total
+            if (dataGridViewFood.Rows.Count > 0)
+            {
+                int rowIndex = dataGridViewFood.Rows.Add("TỔNG CỘNG", "", "", "", grandTotal.ToString("N0"));
+                dataGridViewFood.Rows[rowIndex].DefaultCellStyle.BackColor = Color.LightGray;
+                dataGridViewFood.Rows[rowIndex].DefaultCellStyle.Font = new Font(dataGridViewFood.Font, FontStyle.Bold);
             }
 
             labelStatus.Text = $"Đã tải dữ liệu phòng {comboBoxRoom.Text}";
@@ -92,7 +104,7 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
         {
             foreach (DataGridViewRow row in dataGridViewFood.Rows)
             {
-                if (row.IsNewRow) continue;
+                if (row.IsNewRow || row.Cells["FoodName"].Value?.ToString() == "TỔNG CỘNG") continue;
 
                 if (double.TryParse(row.Cells["QuantityIn"].Value?.ToString(), out double quantityIn) &&
                     double.TryParse(row.Cells["QuantityOut"].Value?.ToString(), out double quantityOut))
@@ -119,7 +131,8 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
 
         private void btnAddFood_Click(object sender, EventArgs e)
         {
-            dataGridViewFood.Rows.Add();
+           StaffCheckForm staffCheckForm = new StaffCheckForm();
+            staffCheckForm.Show();
         }
 
         private void btnRemoveFood_Click(object sender, EventArgs e)
@@ -143,7 +156,7 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             List<string> foodData = new List<string>();
             foreach (DataGridViewRow row in dataGridViewFood.Rows)
             {
-                if (row.IsNewRow) continue;
+                if (row.IsNewRow || row.Cells["FoodName"].Value?.ToString() == "TỔNG CỘNG") continue;
                 string food = row.Cells["FoodName"].Value?.ToString();
                 string inQty = row.Cells["QuantityIn"].Value?.ToString();
                 string outQty = row.Cells["QuantityOut"].Value?.ToString();
@@ -155,6 +168,24 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
 
             File.WriteAllLines($"FoodData_{room}.csv", foodData);
             labelStatus.Text = $"Đã lưu dữ liệu thực phẩm cho phòng {room}.";
+        }
+
+        private void dataGridViewFood_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            if (comboBoxRoom.SelectedValue != null)
+            {
+                int roomId = Convert.ToInt32(comboBoxRoom.SelectedValue);
+                LoadFoodUsageForRoom(roomId);
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn phòng trước khi làm mới.");
+            }
         }
     }
 }

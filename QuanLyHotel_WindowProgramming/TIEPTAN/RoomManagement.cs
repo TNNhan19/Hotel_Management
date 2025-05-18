@@ -22,33 +22,45 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            if (dgvRooms.CurrentRow != null)
+            if (dgvRooms.CurrentRow == null)
             {
-                int roomId = Convert.ToInt32(dgvRooms.CurrentRow.Cells["RoomId"].Value);
+                MessageBox.Show("Vui lòng chọn phòng cần sửa!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-                using (SqlConnection conn = Database.GetConnection())
+            if (!dgvRooms.Columns.Contains("RoomId"))
+            {
+                MessageBox.Show("Cột RoomId không tồn tại trong DataGridView. Vui lòng kiểm tra lại dữ liệu!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            int roomId = Convert.ToInt32(dgvRooms.CurrentRow.Cells["RoomId"].Value);
+            using (SqlConnection conn = Database.GetConnection())
+            {
+                try
                 {
-                    string query = "UPDATE Room SET RoomNo=@RoomNo, RoomType=@RoomType, bed=@Bed, price=@Price, booked=@Booked WHERE RoomId=@RoomId";
-                    SqlCommand cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@RoomNo", txtRoomNo.Text);
-                    cmd.Parameters.AddWithValue("@RoomType", txtRoomType.Text);
-                    cmd.Parameters.AddWithValue("@Bed", txtBed.Text);  
-                    cmd.Parameters.AddWithValue("@Price", long.Parse(txtPrice.Text));
-                    cmd.Parameters.AddWithValue("@Booked", cmbBooked.SelectedItem.ToString());  
-                    cmd.Parameters.AddWithValue("@RoomId", roomId);
-
                     conn.Open();
-                    cmd.ExecuteNonQuery();
-                    conn.Close();
+                    // Loại bỏ cột booked khỏi câu lệnh UPDATE
+                    string query = "UPDATE Room SET RoomNo=@RoomNo, RoomType=@RoomType, bed=@Bed, price=@Price WHERE RoomId=@RoomId";
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@RoomNo", txtRoomNo.Text);
+                        cmd.Parameters.AddWithValue("@RoomType", txtRoomType.Text);
+                        cmd.Parameters.AddWithValue("@Bed", txtBed.Text);
+                        cmd.Parameters.AddWithValue("@Price", long.Parse(txtPrice.Text));
+                        cmd.Parameters.AddWithValue("@RoomId", roomId);
 
-                    MessageBox.Show("Cập nhật phòng thành công!");
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    MessageBox.Show("Cập nhật phòng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     LoadRoomData();
                     ClearForm();
                 }
-            }
-            else
-            {
-                MessageBox.Show("Vui lòng chọn phòng cần sửa!");
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -57,103 +69,133 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
         {
             using (SqlConnection conn = Database.GetConnection())
             {
-                conn.Open();
-                string query = "SELECT RoomId, RoomNo, RoomType, bed, price, booked FROM Room";
-                SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
-                DataTable dataTable = new DataTable();
-                adapter.Fill(dataTable);
-
-                dgvRooms.AutoGenerateColumns = false;
-                dgvRooms.Columns.Clear(); // Clear existing columns
-
-                dgvRooms.Columns.Add(new DataGridViewTextBoxColumn()
+                try
                 {
-                    DataPropertyName = "RoomId",
-                    HeaderText = "Room ID"
-                });
+                    conn.Open();
+                    string query = "SELECT RoomId, RoomNo, RoomType, bed, price, booked FROM Room";
+                    SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
+                    DataTable dataTable = new DataTable();
+                    adapter.Fill(dataTable);
 
-                dgvRooms.Columns.Add(new DataGridViewTextBoxColumn()
+                    // Kiểm tra xem DataTable có chứa các cột cần thiết không
+                    if (dataTable.Columns.Contains("RoomId") && dataTable.Columns.Contains("RoomNo") &&
+                        dataTable.Columns.Contains("RoomType") && dataTable.Columns.Contains("bed") &&
+                        dataTable.Columns.Contains("price") && dataTable.Columns.Contains("booked"))
+                    {
+                        dgvRooms.AutoGenerateColumns = false;
+                        dgvRooms.Columns.Clear();
+
+                        dgvRooms.Columns.Add(new DataGridViewTextBoxColumn()
+                        {
+                            DataPropertyName = "RoomId",
+                            HeaderText = "Room ID",
+                            Name = "RoomId" // Đặt Name để khớp với truy cập trong CellClick
+                        });
+
+                        dgvRooms.Columns.Add(new DataGridViewTextBoxColumn()
+                        {
+                            DataPropertyName = "RoomNo",
+                            HeaderText = "Room Number",
+                            Name = "RoomNo" // Đặt Name để khớp với truy cập trong CellClick
+                        });
+
+                        dgvRooms.Columns.Add(new DataGridViewTextBoxColumn()
+                        {
+                            DataPropertyName = "RoomType",
+                            HeaderText = "Room Type",
+                            Name = "RoomType"
+                        });
+
+                        dgvRooms.Columns.Add(new DataGridViewTextBoxColumn()
+                        {
+                            DataPropertyName = "bed",
+                            HeaderText = "Bed Type",
+                            Name = "bed"
+                        });
+
+                        dgvRooms.Columns.Add(new DataGridViewTextBoxColumn()
+                        {
+                            DataPropertyName = "price",
+                            HeaderText = "Price",
+                            DefaultCellStyle = new DataGridViewCellStyle { Format = "N0" },
+                            Name = "price"
+                        });
+
+                        dgvRooms.Columns.Add(new DataGridViewTextBoxColumn()
+                        {
+                            DataPropertyName = "booked",
+                            HeaderText = "Status",
+                            Name = "booked"
+                        });
+
+                        dgvRooms.DataSource = dataTable;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Dữ liệu từ cơ sở dữ liệu thiếu các cột cần thiết!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                catch (Exception ex)
                 {
-                    DataPropertyName = "RoomNo",
-                    HeaderText = "Room Number"
-                });
-
-                dgvRooms.Columns.Add(new DataGridViewTextBoxColumn()
-                {
-                    DataPropertyName = "RoomType",
-                    HeaderText = "Room Type"
-                });
-
-                dgvRooms.Columns.Add(new DataGridViewTextBoxColumn()
-                {
-                    DataPropertyName = "bed",
-                    HeaderText = "Bed Type"
-                });
-
-                dgvRooms.Columns.Add(new DataGridViewTextBoxColumn()
-                {
-                    DataPropertyName = "price",
-                    HeaderText = "Price",
-                    DefaultCellStyle = new DataGridViewCellStyle { Format = "N0" } // Thousand separator
-                });
-
-                dgvRooms.Columns.Add(new DataGridViewTextBoxColumn()
-                {
-                    DataPropertyName = "booked",
-                    HeaderText = "Status"
-                });
-
-                dgvRooms.DataSource = dataTable;
+                    MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
 
-        // Fix for CS0103: Adding the missing ClearForm method  
         private void ClearForm()
         {
             txtRoomNo.Text = string.Empty;
             txtRoomType.Text = string.Empty;
+            txtBed.Text = string.Empty;
             txtPrice.Text = string.Empty;
-            // Uncomment and adjust the following lines if these controls exist in your form  
-            // txtBed.Text = string.Empty;  
-            // cmbBooked.SelectedIndex = -1;  
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            if (dgvRooms.CurrentRow != null)
+            if (dgvRooms.CurrentRow == null)
             {
-                int roomId = Convert.ToInt32(dgvRooms.CurrentRow.Cells["RoomId"].Value);
+                MessageBox.Show("Vui lòng chọn phòng cần xóa!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-                // Kiểm tra xem phòng này có đang được sử dụng không
-                if (IsRoomInUse(roomId))
-                {
-                    MessageBox.Show("Không thể xóa phòng này vì đang được sử dụng bởi khách hàng.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
+            if (!dgvRooms.Columns.Contains("RoomId"))
+            {
+                MessageBox.Show("Cột RoomId không tồn tại trong DataGridView. Vui lòng kiểm tra lại dữ liệu!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
-                DialogResult result = MessageBox.Show("Bạn có chắc muốn xóa phòng này?", "Xác nhận", MessageBoxButtons.YesNo);
-                if (result == DialogResult.Yes)
+            int roomId = Convert.ToInt32(dgvRooms.CurrentRow.Cells["RoomId"].Value);
+            if (IsRoomInUse(roomId))
+            {
+                MessageBox.Show("Không thể xóa phòng này vì đang được sử dụng bởi khách hàng.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            DialogResult result = MessageBox.Show("Bạn có chắc muốn xóa phòng này?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                using (SqlConnection conn = Database.GetConnection())
                 {
-                    using (SqlConnection conn = Database.GetConnection())
+                    try
                     {
-                        string query = "DELETE FROM Room WHERE RoomId = @RoomId";
-                        SqlCommand cmd = new SqlCommand(query, conn);
-                        cmd.Parameters.AddWithValue("@RoomId", roomId);
-
                         conn.Open();
-                        cmd.ExecuteNonQuery();
-                        conn.Close();
+                        string query = "DELETE FROM Room WHERE RoomId = @RoomId";
+                        using (SqlCommand cmd = new SqlCommand(query, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@RoomId", roomId);
+                            cmd.ExecuteNonQuery();
+                        }
 
-                        MessageBox.Show("Xóa phòng thành công!");
+                        MessageBox.Show("Xóa phòng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         LoadRoomData();
                         ClearForm();
                     }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
-            }
-            else
-            {
-                MessageBox.Show("Vui lòng chọn phòng cần xóa!");
             }
         }
 
@@ -161,35 +203,29 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
         {
             using (SqlConnection conn = Database.GetConnection())
             {
-                string query = "SELECT COUNT(*) FROM Customer WHERE RoomId = @RoomId";
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@RoomId", roomId);
-
-                conn.Open();
-                int count = (int)cmd.ExecuteScalar();
-                conn.Close();
-
-                return count > 0;
+                try
+                {
+                    conn.Open();
+                    string query = "SELECT COUNT(*) FROM Customer WHERE RoomId = @RoomId";
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@RoomId", roomId);
+                        int count = (int)cmd.ExecuteScalar();
+                        return count > 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
             }
         }
 
 
-        private void dgvRooms_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0)
-            {
-                DataGridViewRow row = dgvRooms.Rows[e.RowIndex];
-
-                txtRoomNo.Text = row.Cells["RoomNo"].Value.ToString();
-                txtRoomType.Text = row.Cells["RoomType"].Value.ToString();
-                txtBed.Text = row.Cells["bed"].Value.ToString();
-                txtPrice.Text = row.Cells["price"].Value.ToString();
-                cmbBooked.SelectedItem = row.Cells["booked"].Value.ToString();
-            }
-        }
+        
         private void RoomManagement_Load(object sender, EventArgs e)
         {
-            cmbBooked.SelectedIndex = 0; // hoặc cmbStatus nếu bạn giữ tên cũ
             LoadRoomData();
         }
         private void dgvRooms_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -197,17 +233,11 @@ namespace QuanLyHotel_WindowProgramming.TIEPTAN
             if (e.RowIndex >= 0)
             {
                 DataGridViewRow row = dgvRooms.Rows[e.RowIndex];
-                txtRoomNo.Text = row.Cells["RoomNo"].Value.ToString();
-                txtRoomType.Text = row.Cells["RoomType"].Value.ToString();
-                txtBed.Text = row.Cells["bed"].Value.ToString();
-                txtPrice.Text = row.Cells["price"].Value.ToString();
-                cmbBooked.SelectedItem = row.Cells["booked"].Value.ToString();
+                txtRoomNo.Text = row.Cells["RoomNo"].Value?.ToString() ?? string.Empty;
+                txtRoomType.Text = row.Cells["RoomType"].Value?.ToString() ?? string.Empty;
+                txtBed.Text = row.Cells["bed"].Value?.ToString() ?? string.Empty;
+                txtPrice.Text = row.Cells["price"].Value?.ToString() ?? string.Empty;
             }
-        }
-
-        private void dgvRooms_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
-        {
-
         }
     }
 }

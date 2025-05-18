@@ -40,8 +40,7 @@ namespace QuanLyHotel_WindowProgramming
         //    QuanLyNhanVien_ThemXoaSua qlnv = new QuanLyNhanVien_ThemXoaSua();
         //    qlnv.Show();
         //}
-
-        private void quanLyNhânViênToolStripMenuItem_Click_1(object sender, EventArgs e)
+        private void quảnLýNhânViênToolStripMenuItem_Click(object sender, EventArgs e)
         {
             QuanLyNhanVien_ThemXoaSua qlnv = new QuanLyNhanVien_ThemXoaSua();
             qlnv.Show();

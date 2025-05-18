@@ -58,6 +58,7 @@
             this.attendanceTableAdapter3 = new QuanLyHotel_WindowProgramming.HotelManagementDataSet5TableAdapters.AttendanceTableAdapter();
             this.DataGridViewAttendance = new System.Windows.Forms.DataGridView();
             this.button1 = new System.Windows.Forms.Button();
+            this.btnGenerateSchedule = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.attendanceBindingSource1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.hotelManagementDataSet3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.hotelManagementDataSet)).BeginInit();
@@ -163,7 +164,7 @@
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(164, 179);
+            this.btnOK.Location = new System.Drawing.Point(76, 179);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 13;
@@ -173,7 +174,7 @@
             // 
             // btnRefresh
             // 
-            this.btnRefresh.Location = new System.Drawing.Point(257, 179);
+            this.btnRefresh.Location = new System.Drawing.Point(164, 179);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(75, 23);
             this.btnRefresh.TabIndex = 14;
@@ -258,11 +259,22 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // btnGenerateSchedule
+            // 
+            this.btnGenerateSchedule.Location = new System.Drawing.Point(245, 179);
+            this.btnGenerateSchedule.Name = "btnGenerateSchedule";
+            this.btnGenerateSchedule.Size = new System.Drawing.Size(75, 23);
+            this.btnGenerateSchedule.TabIndex = 21;
+            this.btnGenerateSchedule.Text = "Phân ca làm";
+            this.btnGenerateSchedule.UseVisualStyleBackColor = true;
+            this.btnGenerateSchedule.Click += new System.EventHandler(this.btnGenerateSchedule_Click);
+            // 
             // KiemTraGioLam
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1254, 635);
+            this.Controls.Add(this.btnGenerateSchedule);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.DataGridViewAttendance);
             this.Controls.Add(this.lbCheckOut);
@@ -327,5 +339,6 @@
         private HotelManagementDataSet5TableAdapters.AttendanceTableAdapter attendanceTableAdapter3;
         private System.Windows.Forms.DataGridView DataGridViewAttendance;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnGenerateSchedule;
     }
 }

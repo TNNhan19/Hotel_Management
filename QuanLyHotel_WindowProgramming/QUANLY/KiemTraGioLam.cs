@@ -183,5 +183,12 @@ namespace QuanLyHotel_WindowProgramming
                 MessageBox.Show("Report exported to PDF successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
+
+        private void btnGenerateSchedule_Click(object sender, EventArgs e)
+        {
+            DateTime today = DateTime.Today;
+            DataTable schedule = attendanceManage.GenerateWorkShiftAssignments(today);
+            DataGridViewAttendance.DataSource = schedule;
+        }
     }
 }
