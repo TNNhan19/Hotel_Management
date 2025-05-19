@@ -1,0 +1,63 @@
+
+# Build results
+bin/
+obj/
+[Bb]uild/
+[Ll]og/
+[Dd]ebug/
+[Rr]elease/
+
+# Rider project folders
+.idea/
+
+# Visual Studio Code settings
+.vscode/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# VS folder
+.vs/
+
+# Others
+*.log
+*.vsidx
+*.ncb
+*.sdf
+*.cache
+*.dbmdl
+*.pdb
+
+# NuGet packages
+*.nupkg
+packages/
+*.snupkg
+
+# Auto-generated files
+*.Designer.cs
+*.g.cs
+*.g.i.cs
+Generated_Code/
+
+# DotCover
+*.dotCover
+
+# Test results
+TestResults/
+
+# Publish outputs
+publish/
+*.Publish.xml
+
+# Temporary files
+~$*
+*.tmp
+*.bak
+*.swp
+
+# ReSharper
+_ReSharper*/
+*.DotSettings.user
